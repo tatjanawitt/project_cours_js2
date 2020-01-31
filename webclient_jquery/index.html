@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Adresse CRUD</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/fonts.min.css">
+	  <link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
+	
+    <script src="js/jquery.min.js" defer></script>
+	  <script src="js/popper.min.js" defer></script>
+    <script src="js/bootstrap.min.js" defer></script>
+	  <script src="js/jquery.dataTables.min.js" defer></script>
+	  <script src="js/ajax.js" defer></script>
+	  <script src="js/dataTables.bootstrap4.min.js" defer></script>
+
+    <style>
+      /* DataTable Pagination Style */
+      .page-item.active .page-link {
+        font-weight: bold !important;
+        color: #212529 !important;
+        background-color: #ffc107 !important;
+        border-color: #ffc107 !important;
+      }
+      .page-link {
+        font-weight: bold !important;
+        color: #fff !important;
+        background-color: #6c757d !important; 
+        border-color: #6c757d !important;
+      }
+      /* Input Validierung */
+      .highlightfield {
+        background-color: #f8d7da !important;
+        border-color: #f5c6cb !important;
+      }
+    </style>        
+  </head>
+  
+  <body class="badge-dark text-dark">
+
+    <!-- DataTable Tabelle, Add Button für Adresse (+)-->
+    <div class="row">
+      <div class="col">
+        <div class="card mt-5">
+          <div class="card-title mx-5 my-2 d-flex justify-content-between">
+            <h3 class="text-dark font-weight-bold">JS Projekt - Adressen CRUD</h3>           
+            <button type="button" 
+                    class="btn btn-warning" 
+                    data-toggle="modal" 
+                    data-target="#modal"><i class="fa fa-plus"></i>
+            </button>
+          </div>  
+            <div class="card-body">
+              <p id='delMessage' class="alert alert-success" role="alert"></p>
+              <div id="table" class="mx-3">
+              <table id="addressTable" class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Vorname</th>
+                        <th>Nachname</th>
+                        <th>Straße</th>
+                        <th>PLZ</th>
+                        <th>Ort</th>
+                        <th>Email</th>
+                        <th>Telefon</th>
+                        <th>Mobil</th>
+                        <th>Aktion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <!-- Body with JQuery -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Modal Dialog für Adresse hinzufügen oder ändern (upsert) -->
+    <div class="modal fade" id="modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-dark" id="modalTitle">Adresse anlegen/ändern:</h5>
+          </div>
+          <div class="modal-body">
+            <p id='message' class="alert alert-success" role="alert"></p>
+
+            <form id="form" novalidate>
+              <div class="form-group row">
+
+                <label for="id" class="col-sm-3 col-form-label">ID</label>
+                  <div class="col-sm-9">
+                    <input id="id"
+                          maxlength="11"
+                          type="text"
+                          class="form-control my-2" 
+                          readonly></div>
+                <label for="firstname" class="col-sm-3 col-form-label text-nowrap">
+                  <span class="badge badge-warning">*</span> Vorname</label>
+                  <div class="col-sm-9">         
+                    <input id="firstname" required tabindex="1"
+                          maxlength="60"
+                          type="text" 
+                          class="form-control my-2"></div>
+                <label for="lastname" class="col-sm-3 col-form-label text-nowrap"> 
+                  <span class="badge badge-warning">*</span> Name</label>
+                  <div class="col-sm-9"> 
+                    <input id="lastname" required tabindex="2"
+                          maxlength="60"
+                          type="text" 
+                          class="form-control my-2"></div>
+                <label for="street" class="col-sm-3 col-form-label text-nowrap">
+                  <span class="badge badge-warning">*</span> Straße</label>
+                  <div class="col-sm-9"> 
+                    <input id="street" required tabindex="3"
+                          maxlength="110"
+                          type="text" 
+                          class="form-control my-2"></div>
+                <label for="postcode" class="col-sm-3 col-form-label text-nowrap">
+                  <span class="badge badge-warning">*</span> PLZ</label>
+                  <div class="col-sm-9"> 
+                    <input id="postcode" required tabindex="4"
+                          maxlength="5" 
+                          size="5" 
+                          pattern="[0-9]{5}"
+                          type="text" 
+                          class="form-control my-2"></div>
+                <label for="place" class="col-sm-3 col-form-label text-nowrap">
+                  <span class="badge badge-warning">*</span> Ort</label>
+                  <div class="col-sm-9"> 
+                    <input id="place" required tabindex="5"
+                          maxlength="100"
+                          type="text" 
+                          class="form-control my-2"></div>
+
+              <hr style="width: 90%; color: #DCDCDC; height: 1px; background-color:#DCDCDC;" />
+
+                <label for="email" class="col-sm-3 col-form-label text-nowrap">
+                  <span class="badge badge-warning">*</span> Email</label>
+                  <div class="col-sm-9"> 
+                    <input id="email" required tabindex="6"
+                          maxlength="150"
+                          type="email" 
+                          class="form-control my-2"></div>
+                <label for="fon" class="col-sm-3 col-form-label">Telefon</label>
+                  <div class="col-sm-9"> 
+                    <input id="fon" tabindex="7"
+                          maxlength="60"
+                          type="text" 
+                          class="form-control my-2"></div>
+                <label for="mobil" class="col-sm-3 col-form-label">Mobil</label>
+                  <div class="col-sm-9"> 
+                    <input id="mobil" tabindex="8"
+                          maxlength="70" 
+                          type="text" 
+                          class="form-control my-2"></div>
+              </div>                
+            </form>
+          <div><span class="badge badge-warning">*</span> Pflichtfelder</div>
+          </div>
+          <div class="modal-footer">
+            <button id="saveBtn" tabindex="9"
+                    type="button" 
+                    class="btn btn-warning">Speichern</button>
+			      <button id='closeBtn' tabindex="10"
+                    type="button" 
+                    class="btn btn-secondary" 
+                    data-dismiss="modal">Abbrechen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Modal Dialog zum Löschen einer Adresse -->
+    <div class="modal fade" id="delModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-dark" id="delModalTitle">Diese Adresse löschen:</h5>
+          </div>          
+          <div class="modal-body">
+            <p id='delBody'></p>
+          </div>	
+          <div class="modal-footer">
+            <button id="delBtn"
+                type="button" 
+                class="btn btn-warning">Löschen</button>
+            <button id='delCloseBtn'
+                type="button" 
+                class="btn btn-secondary" 
+                data-dismiss="modal">Abbrechen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+  </body>
+</html>

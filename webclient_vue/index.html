@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset='utf-8' />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+
+  <title>Vuetifiy CRUD</title>
+  
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.8/dist/vuetify.min.css" rel="stylesheet">
+
+  <style>
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js" defer></script>
+  <script src="./js/vuetify_crud.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <div id="app">
+      <v-app id="inspire">
+        <v-card>
+          <v-card-title>
+            
+            <v-spacer></v-spacer>
+            <v-text-field 
+              v-model="search" 
+              append-icon="search" 
+              label="Search" 
+              single-line hide-details>
+            </v-text-field>
+          </v-card-title>
+          <v-data-table 
+            :headers="headers" 
+            :items="contacts" 
+            :search="search" 
+            :items-per-page="10" 
+            sort-by="calories"
+            class="elevation-1">
+            <template v-slot:top>
+              <v-toolbar flat color="white">
+                <v-toolbar-title>Meine Kontakte</v-toolbar-title>
+                <v-divider class="mx-4" inset vertical></v-divider>
+                <v-spacer></v-spacer>
+                <v-dialog v-model="dialog" max-width="500px">
+                  <template v-slot:activator="{ on }">
+                    <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon dark>mdi-plus</v-icon></v-btn>
+                  </template>
+                  <v-card>
+                    <v-card-title>
+                      <span class="headline">{{ formTitle }} {{ editedItem.id ? '( ID: '+editedItem.id+' )' : '' }}</span>
+                    </v-card-title>
+
+                    <v-card-text>
+                      <v-container>
+                        <v-row>  
+                          <v-col cols="12" sm="6">
+                            <v-text-field 
+                            v-model="editedItem.firstname" 
+                            label="Vorname" 
+                            counter="25"
+                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="6">
+                            <v-text-field 
+                            v-model="editedItem.lastname" 
+                            label="Nachname"
+                            counter="25"
+                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>  
+                          <v-col cols="12" sm="12">
+                            <v-text-field 
+                            v-model="editedItem.street" 
+                            label="Straße"
+                            counter="75"
+                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                          </v-col>
+                        </v-row>  
+                        <v-row> 
+                          <v-col cols="12" sm="4">
+                            <v-text-field 
+                            v-model="editedItem.postcode" 
+                            label="Postleitzahl" 
+                            counter="5"
+                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="8">
+                            <v-text-field 
+                            v-model="editedItem.place" 
+                            label="Ort"
+                            counter="50"
+                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>  
+                          <v-col cols="12" sm="12">
+                            <v-text-field 
+                            v-model="editedItem.email" 
+                            label="Email"
+                            counter="100"
+                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>  
+                          <v-col cols="12" sm="6">
+                            <v-text-field 
+                            v-model="editedItem.fon" 
+                            label="Fon"
+                            counter="30"
+                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="6">
+                            <v-text-field 
+                            v-model="editedItem.mobil" 
+                            label="Mobil"
+                            counter="30"
+                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-card-text>
+
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                      <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-toolbar>
+            </template>
+            <template v-slot:item.action="{ item }">
+              <v-icon small class="mr-2" @click="editItem(item)">
+                edit
+              </v-icon>
+              <v-icon small @click="deleteItem(item)">
+                delete
+              </v-icon>
+            </template>
+            <template v-slot:no-data>
+              <v-btn color="primary" @click="initialize">Reset</v-btn>
+            </template>
+          </v-data-table>
+        </v-card>
+      </v-app>
+    </div>
+
+  </div>
+</body>
+
+</html>
