@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { text: 'Mobil', value: 'mobil' },
         { text: 'Actions', value: 'action', sortable: false },
       ],
+      url: '/api/contacts',
       contacts: [],
       editedIndex: -1,
       editedItem: {
@@ -50,11 +51,19 @@ document.addEventListener('DOMContentLoaded', () => {
         fon: '',
         mobil: '',
       },
+      title: {
+        add: 'Kontakt anlegen:',
+        edit: 'Kontakt editieren: ID -',
+        topic: 'Meine Kontakte'
+      },
+      msg: {
+        counter: 'eingefügte Zeichen'
+      }
     }),
 
     computed: {
       formTitle() {
-        return this.editedIndex === -1 ? 'Kontakt anlegen' : 'Kontakt editieren '
+        return this.editedIndex === -1 ? this.title.add : this.title.edit
       },
     },
 
@@ -87,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('delete ID: ', item.id);
         let msg = `Sollen die Daten mit ID: ${item.id} gelöscht werden ?`;
         if (confirm(msg)) {
-          fetch(new Request('/api/contacts/' + item.id, { method: 'delete' }))
+          fetch(new Request(`${this.url}/${item.id}`, { method: 'delete' }))
             .then(antwort => antwort.text())
             .then(data => {
               console.log(data);
@@ -109,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (this.editedIndex > -1) {
           console.log('update ID: ', this.editedItem.id)
 
-          fetch(new Request('/api/contacts/' + this.editedItem.id, {
+          fetch(new Request(`${this.url}/${this.editedItem.id}`, {
             method: 'put',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify(this.editedItem)
@@ -126,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
           console.log('create Obj: ', this.editedItem);
           delete this.editedItem['id'];
 
-          fetch(new Request('/api/contacts', {
+          fetch(new Request(this.url, {
             method: 'post',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify(this.editedItem)

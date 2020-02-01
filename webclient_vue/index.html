@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 
   <title>Vuetifiy CRUD</title>
-  
+
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
@@ -27,7 +27,7 @@
       <v-app id="inspire">
         <v-card>
           <v-card-title>
-            
+
             <v-spacer></v-spacer>
             <v-text-field 
               v-model="search" 
@@ -41,88 +41,94 @@
             :items="contacts" 
             :search="search" 
             :items-per-page="10" 
-            sort-by="calories"
+            sort-by="id"
             class="elevation-1">
             <template v-slot:top>
               <v-toolbar flat color="white">
-                <v-toolbar-title>Meine Kontakte</v-toolbar-title>
+                <v-toolbar-title>{{ title.topic }}</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="500px">
                   <template v-slot:activator="{ on }">
-                    <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon dark>mdi-plus</v-icon></v-btn>
+                    <v-btn color="primary" dark class="mb-2" v-on="on">
+                      <v-icon dark>mdi-plus</v-icon>
+                    </v-btn>
                   </template>
                   <v-card>
                     <v-card-title>
-                      <span class="headline">{{ formTitle }} {{ editedItem.id ? '( ID: '+editedItem.id+' )' : '' }}</span>
+                      <span class="headline">{{ formTitle }}
+                        {{ editedItem.id ? editedItem.id : '' }}</span>
                     </v-card-title>
 
                     <v-card-text>
                       <v-container>
-                        <v-row>  
+                        <v-row>
                           <v-col cols="12" sm="6">
                             <v-text-field 
-                            v-model="editedItem.firstname" 
-                            label="Vorname" 
-                            counter="25"
-                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                              v-model="editedItem.firstname" 
+                              label="Vorname" 
+                              counter="25"
+                              :hint="msg.counter"></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6">
                             <v-text-field 
-                            v-model="editedItem.lastname" 
-                            label="Nachname"
-                            counter="25"
-                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                              v-model="editedItem.lastname" 
+                              label="Nachname" 
+                              counter="25"
+                              :hint="msg.counter"></v-text-field>
                           </v-col>
                         </v-row>
-                        <v-row>  
+                        <v-row>
                           <v-col cols="12" sm="12">
                             <v-text-field 
-                            v-model="editedItem.street" 
-                            label="Straße"
-                            counter="75"
-                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                              v-model="editedItem.street" 
+                              label="Straße" 
+                              counter="75" 
+                              :hint="msg.counter">
+                            </v-text-field>
                           </v-col>
-                        </v-row>  
-                        <v-row> 
+                        </v-row>
+                        <v-row>
                           <v-col cols="12" sm="4">
                             <v-text-field 
-                            v-model="editedItem.postcode" 
-                            label="Postleitzahl" 
-                            counter="5"
-                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                              v-model="editedItem.postcode" 
+                              label="Postleitzahl" 
+                              counter="5"
+                              :hint="msg.counter"></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="8">
                             <v-text-field 
-                            v-model="editedItem.place" 
-                            label="Ort"
-                            counter="50"
-                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                              v-model="editedItem.place" 
+                              label="Ort" 
+                              counter="50" 
+                              :hint="msg.counter">
+                            </v-text-field>
                           </v-col>
                         </v-row>
-                        <v-row>  
+                        <v-row>
                           <v-col cols="12" sm="12">
                             <v-text-field 
-                            v-model="editedItem.email" 
-                            label="Email"
-                            counter="100"
-                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                              v-model="editedItem.email" 
+                              label="Email" 
+                              counter="100" 
+                              :hint="msg.counter">
+                            </v-text-field>
                           </v-col>
                         </v-row>
-                        <v-row>  
+                        <v-row>
                           <v-col cols="12" sm="6">
                             <v-text-field 
-                            v-model="editedItem.fon" 
-                            label="Fon"
-                            counter="30"
-                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                              v-model="editedItem.fon" 
+                              label="Fon" 
+                              counter="30"
+                              hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6">
                             <v-text-field 
-                            v-model="editedItem.mobil" 
-                            label="Mobil"
-                            counter="30"
-                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                              v-model="editedItem.mobil" 
+                              label="Mobil" 
+                              counter="30"
+                              hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
                           </v-col>
                         </v-row>
                       </v-container>
