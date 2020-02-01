@@ -3,6 +3,7 @@
 // https://vuetifyjs.com/en/components/data-tables#examples
 
 document.addEventListener('DOMContentLoaded', () => {
+
   new Vue({
     el: '#app',
     vuetify: new Vuetify(),
@@ -54,11 +55,12 @@ document.addEventListener('DOMContentLoaded', () => {
       title: {
         add: 'Kontakt anlegen:',
         edit: 'Kontakt editieren: ID -',
-        topic: 'Meine Kontakte'
+        topic: 'Übersicht'
       },
       msg: {
         counter: 'eingefügte Zeichen'
-      }
+      },
+      importJson: null,
     }),
 
     computed: {
@@ -112,6 +114,11 @@ document.addEventListener('DOMContentLoaded', () => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
         }, 300)
+      },
+
+      submitFiles(file){
+        let formData = new FormData();
+        console.log(this.importJson);
       },
 
       save() {  // save update or create

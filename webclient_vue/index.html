@@ -27,13 +27,12 @@
       <v-app id="inspire">
         <v-card>
           <v-card-title>
-
+            <span class="headline">Kontaktliste</span>
             <v-spacer></v-spacer>
             <v-text-field 
               v-model="search" 
               append-icon="search" 
-              label="Search" 
-              single-line hide-details>
+              label="filtern">
             </v-text-field>
           </v-card-title>
           <v-data-table 
@@ -49,10 +48,15 @@
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="500px">
-                  <template v-slot:activator="{ on }">
-                    <v-btn color="primary" dark class="mb-2" v-on="on">
+                  <template v-slot:activator="{ on }">                   
+                    <v-btn color="indigo" dark class="ma-2 mb-2 ml-2" v-on="on">
                       <v-icon dark>mdi-plus</v-icon>
+                    </v-btn>                    
+                    <v-btn color="indigo" dark class="ma-2 mb-2 mr-2 ml-4" @click="submitFiles">
+                      <v-icon dark>mdi-file-upload</v-icon>
                     </v-btn>
+                    <v-file-input label="Import JSON Datei" v-model="importJson"></v-file-input>
+                    
                   </template>
                   <v-card>
                     <v-card-title>
@@ -144,15 +148,15 @@
               </v-toolbar>
             </template>
             <template v-slot:item.action="{ item }">
-              <v-icon small class="mr-2" @click="editItem(item)">
+              <v-icon color="indigo" class="mr-3" @click="editItem(item)">
                 edit
               </v-icon>
-              <v-icon small @click="deleteItem(item)">
+              <v-icon color="red" @click="deleteItem(item)">
                 delete
               </v-icon>
             </template>
             <template v-slot:no-data>
-              <v-btn color="primary" @click="initialize">Reset</v-btn>
+              <v-btn color="indigo" dark class="ma-2" @click="initialize">Reset</v-btn>
             </template>
           </v-data-table>
         </v-card>
