@@ -1,4 +1,5 @@
 'use strict';
+
 const formidable = require('formidable');
 const fs = require('fs');
 const Contact = require('../../model/contact');
@@ -9,8 +10,7 @@ module.exports = (req, res) => {
 
     let db = couchDb.use(new Contact().dbName);
     let pfadUpload = 'uploads/';
-    let importData = [];
-
+    
     /* id is number, _id is string, use for _id and id the same value*/
     const findMaxId = data => {
         let ids = [];
@@ -48,26 +48,15 @@ module.exports = (req, res) => {
             .catch(err => res.send(`Error: ${err}`));
     }
 
-    const rename = datei => {
+    const fileToObj = datei => {
         return new Promise((resolve, reject) => {
-            let alt = datei.path;
-            //let original = pfadUpload + datei.name;
-            console.log(alt);
-
-            fs.readFile(alt, (err, data) => {
+            fs.readFile(datei.path, (err, data) => {
                 if (err) reject(err);
                 resolve(JSON.parse(data));
             });
-            /*
-                        fs.rename(alt, original, err => {
-                            if (err) reject(err);
-                            else resolve();
-                        })*/
         });
     }
 
-
-    // VIRTUELLE PFADE
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
     form.uploadDir = pfadUpload;
@@ -76,20 +65,15 @@ module.exports = (req, res) => {
     form.parse(req, (err, fields, uploadFiles) => {
         if (err) console.log(err);
         else {
-            let files = uploadFiles.fileimport; // console.log(files);
+            let files = uploadFiles.fileimport;
             if (!Array.isArray(files)) files = [files];
 
             let promises = [];
-            files.forEach(file => {
-                promises.push(
-                    rename(file)
-                );
-            })
+            files.forEach(file => promises.push( fileToObj(file) ))
             Promise.all(promises)
-                .then(erg => importToDB(erg[0]))
+                .then(res => importToDB(res[0]))
                 .then(() => console.log('ok'))
-                .catch(console.log)
-
+                .catch(err => console.log(err))
         }
     })
 };
