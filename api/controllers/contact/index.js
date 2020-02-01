@@ -5,5 +5,6 @@ module.exports = {
     create: require('./create'),
     show:   require('./show'),
     update: require('./update'),
-    remove: require('./remove')
+    remove: require('./remove'),
+    importData: require('./importData')
 };

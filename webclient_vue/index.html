@@ -49,14 +49,15 @@
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="500px">
                   <template v-slot:activator="{ on }">                   
-                    <v-btn color="indigo" dark class="ma-2 mb-2 ml-2" v-on="on">
+                    <v-btn color="indigo" dark class="ma-2 mb-6 ml-2" v-on="on">
                       <v-icon dark>mdi-plus</v-icon>
                     </v-btn>                    
-                    <v-btn color="indigo" dark class="ma-2 mb-2 mr-2 ml-4" @click="submitFiles">
+                    <v-btn color="indigo" dark class="ma-2 mb-6 mr-2 ml-4" @click.native="openFileDialog">
                       <v-icon dark>mdi-file-upload</v-icon>
                     </v-btn>
-                    <v-file-input label="Import JSON Datei" v-model="importJson"></v-file-input>
-                    
+                    <form id="jsonfile">
+                      <input type="file" name="fileimport" id="file-upload" style="display:none" multiple @change="onFileChange">
+                    </form>
                   </template>
                   <v-card>
                     <v-card-title>

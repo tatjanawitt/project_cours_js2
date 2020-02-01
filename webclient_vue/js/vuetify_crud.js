@@ -3,6 +3,7 @@
 // https://vuetifyjs.com/en/components/data-tables#examples
 
 document.addEventListener('DOMContentLoaded', () => {
+  let log = console.log;
 
   new Vue({
     el: '#app',
@@ -58,9 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
         topic: 'Übersicht'
       },
       msg: {
-        counter: 'eingefügte Zeichen'
+        counter: 'eingefügte Zeichen',
+        del: ' - Sollen die Daten gelöscht werden ?'
       },
-      importJson: null,
     }),
 
     computed: {
@@ -80,35 +81,35 @@ document.addEventListener('DOMContentLoaded', () => {
     },
 
     methods: {
-      initialize() { // get table list
-        fetch('/api/contacts')
+      initialize() {
+        fetch(this.url)
           .then(result => result.json())
           .then(result => this.contacts = result)
           .catch(console.log)
       },
 
-      editItem(item) { // get row data for modal dialog
+      editItem(item) {
         this.editedIndex = this.contacts.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
 
-      deleteItem(item) { // delete row and refresh table
-        //const index = this.contacts.indexOf(item)
-        console.log('delete ID: ', item.id);
-        let msg = `Sollen die Daten mit ID: ${item.id} gelöscht werden ?`;
-        if (confirm(msg)) {
-          fetch(new Request(`${this.url}/${item.id}`, { method: 'delete' }))
+      deleteItem(item) {
+        log('delID: ', item.id);
+        if (confirm(`ID: ${item.id} ${this.msg.del}`)) {
+          fetch(new Request(`${this.url}/${item.id}`, {
+            method: 'delete'
+          }))
             .then(antwort => antwort.text())
             .then(data => {
               console.log(data);
               this.initialize();
-            }
-            ).catch(err => console.log(err))
+            })
+            .catch(err => console.log(err))
         }
       },
 
-      close() { // close modal dialog upsert
+      close() {
         this.dialog = false
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
@@ -116,45 +117,50 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 300)
       },
 
-      submitFiles(file){
-        let formData = new FormData();
-        console.log(this.importJson);
+      openFileDialog() {
+        document.getElementById('file-upload').click();
       },
 
-      save() {  // save update or create
-        if (this.editedIndex > -1) {
-          console.log('update ID: ', this.editedItem.id)
+      onFileChange(e) {
+        let formular = document.querySelector('#jsonfile');
+        fetch(new Request('/api/uploadFile', {
+          method: 'post',
+          body: new FormData(formular)
+        }))
+          .then(res => res.text)
+          .then(res => log(res))
+          .catch(err => log(err))
+      },
 
+      save() {
+        if (this.editedIndex > -1) 
+        {
+          log('editID: ', this.editedItem.id)
           fetch(new Request(`${this.url}/${this.editedItem.id}`, {
             method: 'put',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify(this.editedItem)
           }))
             .then(resp => resp.text())
-            .then(data => {
-              console.log(data);
-              setTimeout(() => this.initialize(), 400)  //hack
-            }
-            ).catch(err => console.log(err))
-          // Object.assign(this.contacts[this.editedIndex], this.editedItem)
-
-        } else {
-          console.log('create Obj: ', this.editedItem);
+            .then(data => { log(data);
+              setTimeout(() => this.initialize(), 400)  //hack, couchdb to slow
+            })
+            .catch(err => log(err))
+        }
+        else 
+        {
+          log('newObj: ', this.editedItem);
           delete this.editedItem['id'];
-
           fetch(new Request(this.url, {
             method: 'post',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify(this.editedItem)
           }))
             .then(resp => resp.text())
-            .then(data => {
-              console.log(data);
+            .then(data => { log(data);
               this.initialize();
-            }
-            ).catch(err => console.log(err))
-
-          //this.contacts.push(this.editedItem)
+            })
+            .catch(err => log(err))
         }
         this.close()
       },
