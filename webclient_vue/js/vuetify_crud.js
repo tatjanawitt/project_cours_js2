@@ -127,8 +127,10 @@ document.addEventListener('DOMContentLoaded', () => {
           method: 'post',
           body: new FormData(formular)
         }))
-          .then(res => res.text)
-          .then(res => log(res))
+          .then(res => res.text())
+          .then(res => { log(res);
+            setTimeout(() => this.initialize(), 400)
+          })
           .catch(err => log(err))
       },
 

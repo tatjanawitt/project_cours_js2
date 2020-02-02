@@ -17,7 +17,7 @@ router.post('/contacts', contactCtl.create);
 router.put('/contacts/:id', contactCtl.update);
 // DELETE /api/contacts/{id}
 router.delete('/contacts/:id', contactCtl.remove);
-//uplaod json
+// POST /api/uplaodFile    (json import for db)
 router.post('/uploadFile', contactCtl.import);
 
 module.exports = router;

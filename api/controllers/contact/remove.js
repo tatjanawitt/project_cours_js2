@@ -6,11 +6,14 @@ const couchDb = require('../../couchDb');
 module.exports = (req, res) => {
 
   let db = couchDb.use(new Contact().dbName);
-  
-  /* _id and id are the same value */
+
+  const delRecord = (id, rev) => {
+    db.destroy(id, rev)
+      .then(resp => res.send('Daten gelöscht! ID:' + resp.id ))
+      .catch(err => res.send(`Error: ${err}`));
+  }
+
   db.get(req.params.id)
-    .then(rec => db.destroy(rec._id, rec._rev))
-      .then(resp => res.send('Daten von <b>ID: ' + resp.id + '</b> gelöscht!'))
-      .catch(err => res.send(`Error: ${err}`))
+    .then(rec => delRecord(rec._id, rec._rev))
     .catch(err => res.send(`Error: ${err}`));
 };

@@ -1,51 +1,29 @@
 'use strict';
 
-const formidable = require('formidable');
 const fs = require('fs');
+const formidable = require('formidable');
 const Contact = require('../../model/contact');
 const couchDb = require('../../couchDb');
+const getMaxId = require('./get_max_id');
 
 
 module.exports = (req, res) => {
 
     let db = couchDb.use(new Contact().dbName);
     let pfadUpload = 'uploads/';
-    
-    /* id is number, _id is string, use for _id and id the same value*/
-    const findMaxId = data => {
-        let ids = [];
-        data.forEach(doc => doc.id ? ids.push(Number(doc.id)) : false);
-        return data.length ? Math.max(...ids) : 0;
-    }
-
-    const manageMaxId = (content, maxId) => {
-        let data = [];
-        for (let item of content) {
-            maxId += 1;
-            data.push(addId(item, maxId));
-        }
-        return data;
-    }
-
-    const addId = (data, maxId) => {
-        let newObj = new Contact({ id: maxId, ...data });
-        newObj['_id'] = '' + newObj.id;
-        return newObj;
-    }
 
     const saveAll = data => {
         db.bulk({ docs: data })
-            .then(() => res.send('Daten gespeichert!'))
-            .catch(err => res.send(`Error: ${err}`));
+            .then(res => console.log(res))
+            .catch(err => console.log(err));
     }
 
-    //importData  
     const importToDB = importData => {
         db.list()
-            .then(body => findMaxId(body.rows))
-            .then(maxId => manageMaxId(importData, maxId))
+            .then(body => getMaxId.findMaxId(body.rows))
+            .then(maxId => getMaxId.incrementId(importData, maxId))
             .then(data => saveAll(data))
-            .catch(err => res.send(`Error: ${err}`));
+            .catch(err => console.log(err));
     }
 
     const fileToObj = datei => {
@@ -69,11 +47,11 @@ module.exports = (req, res) => {
             if (!Array.isArray(files)) files = [files];
 
             let promises = [];
-            files.forEach(file => promises.push( fileToObj(file) ))
+            files.forEach(file => promises.push(fileToObj(file)))
             Promise.all(promises)
                 .then(res => importToDB(res[0]))
-                .then(() => console.log('ok'))
-                .catch(err => console.log(err))
+                .then(() => res.send('Daten importiert!'))
+                .catch(err => res.send(`Error: ${err}`))
         }
     })
 };

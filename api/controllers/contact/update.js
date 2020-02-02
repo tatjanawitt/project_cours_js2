@@ -8,10 +8,13 @@ module.exports = (req, res) => {
   let contact = new Contact({ ...req.body });
   let db = couchDb.use(contact.dbName);
 
-  /* _id and id are the same value */
+  const save = data => {
+    db.insert(data)
+      .then(resp => res.send('Daten geändert! ID:' + resp.id))
+      .catch(err => res.send(`Error: ${err}`));
+  }
+
   db.get(req.params.id)
-    .then(rec => db.insert({ _id: rec._id, _rev: rec._rev, ...contact })
-      .then(resp => res.send('Daten gespeichert!' + resp.id ))
-      .catch(err => res.send(`Error: ${err}`)))
+    .then(rec => save({ _id: rec._id, _rev: rec._rev, ...contact }))
     .catch(err => res.send(`Error: ${err}`));
 };
