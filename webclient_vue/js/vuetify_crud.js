@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       title: {
         add: 'Kontakt anlegen:',
-        edit: 'Kontakt editieren: ID -',
+        edit: 'Kontakt editieren: ID#',
         topic: 'Übersicht'
       },
       msg: {

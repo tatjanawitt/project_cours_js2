@@ -18,6 +18,6 @@ router.put('/contacts/:id', contactCtl.update);
 // DELETE /api/contacts/{id}
 router.delete('/contacts/:id', contactCtl.remove);
 //uplaod json
-router.post('/uploadFile', contactCtl.importData);
+router.post('/uploadFile', contactCtl.import);
 
 module.exports = router;
