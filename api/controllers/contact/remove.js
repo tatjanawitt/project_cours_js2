@@ -10,10 +10,10 @@ module.exports = (req, res) => {
   const delRecord = (id, rev) => {
     db.destroy(id, rev)
       .then(resp => res.send('Daten gelöscht! ID:' + resp.id ))
-      .catch(err => res.send(`Error: ${err}`));
+      .catch(err => res.send('error: '+ err));
   }
 
   db.get(req.params.id)
     .then(rec => delRecord(rec._id, rec._rev))
-    .catch(err => res.send(`Error: ${err}`));
+    .catch(err => res.send('error: '+ err));
 };

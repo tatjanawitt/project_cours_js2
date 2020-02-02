@@ -9,5 +9,5 @@ module.exports = (req, res) => {
 
   db.get(req.params.id)
     .then(data => res.send(JSON.stringify(data)))
-    .catch(err => res.send(`Error: ${err}`));
+    .catch(err => res.send('error: '+ err));
 };

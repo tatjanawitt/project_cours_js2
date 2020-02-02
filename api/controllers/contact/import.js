@@ -4,7 +4,7 @@ const fs = require('fs');
 const formidable = require('formidable');
 const Contact = require('../../model/contact');
 const couchDb = require('../../couchDb');
-const getMaxId = require('./get_max_id');
+const getMaxId = require('./func/get_max_id');
 
 
 module.exports = (req, res) => {
@@ -51,7 +51,7 @@ module.exports = (req, res) => {
             Promise.all(promises)
                 .then(res => importToDB(res[0]))
                 .then(() => res.send('Daten importiert!'))
-                .catch(err => res.send(`Error: ${err}`))
+                .catch(err => res.send('error: '+ err))
         }
     })
 };

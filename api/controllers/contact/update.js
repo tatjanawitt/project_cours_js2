@@ -11,10 +11,10 @@ module.exports = (req, res) => {
   const save = data => {
     db.insert(data)
       .then(resp => res.send('Daten geändert! ID:' + resp.id))
-      .catch(err => res.send(`Error: ${err}`));
+      .catch(err => res.send('error: '+ err));
   }
 
   db.get(req.params.id)
     .then(rec => save({ _id: rec._id, _rev: rec._rev, ...contact }))
-    .catch(err => res.send(`Error: ${err}`));
+    .catch(err => res.send('error: '+ err));
 };

@@ -1,4 +1,5 @@
 'use strict';
+
 const express = require('express');
 const contactCtl = require('./controllers/contact')
 

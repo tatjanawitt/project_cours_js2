@@ -15,7 +15,7 @@ module.exports = (req, res) => {
         result.rows.forEach(item => data.push(item.doc));
         res.send(JSON.stringify(data));
       })
-      .catch(err => res.send(`Error: ${err}`))
+      .catch(err => res.send('error: '+ err))
   }
 
   couchDb.list()
@@ -24,5 +24,5 @@ module.exports = (req, res) => {
       return;
     })
     .then(() => sendData(dbName))
-    .catch(err => res.send(`Error: ${err}`));
+    .catch(err => res.send('error: '+ err));
 };

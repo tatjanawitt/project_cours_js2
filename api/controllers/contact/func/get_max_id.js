@@ -1,6 +1,6 @@
 'use strict';
 
-const Contact = require('../../model/contact');
+const Contact = require('../../../model/contact');
 
  /* id is number, _id is string, use for _id and id the same value*/
  const findMaxId = data => {
