@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
     data: () => ({
       dialog: false,
       search: '',
+      alert: false,
+      alertMsg: '',
+      alertType: 'success',
       headers: [
         {
           text: 'ID',
@@ -55,7 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
       title: {
         add: 'Kontakt anlegen:',
         edit: 'Kontakt editieren: ID#',
-        topic: 'Übersicht'
+        topic: 'Übersicht',
+        table: 'Kontakte'
       },
       msg: {
         counter: 'eingefügte Zeichen',
@@ -94,6 +98,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'indigo';
       },
 
+      toggleAlert(msg, typ) {
+        this.alert = !this.alert;
+        this.alertMsg = msg;
+        this.alertType = typ;
+        setTimeout(() => this.alert = false, 1000 * 6);
+      },
+
       editItem(item) {
         this.editedIndex = this.contacts.indexOf(item)
         this.editedItem = Object.assign({}, item)
@@ -108,10 +119,13 @@ document.addEventListener('DOMContentLoaded', () => {
           }))
             .then(antwort => antwort.text())
             .then(data => {
-              console.log(data);
               this.initialize();
+              this.toggleAlert(data, 'success');
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+              console.log(err)
+              this.toggleAlert(data, 'error');
+            });
         }
       },
 
@@ -134,10 +148,16 @@ document.addEventListener('DOMContentLoaded', () => {
           body: new FormData(formular)
         }))
           .then(res => res.text())
-          .then(res => { log(res);
-            setTimeout(() => this.initialize(), 400)
+          .then(data => { log(data);
+            setTimeout(() => {
+              this.initialize();
+              this.toggleAlert(data, 'success');
+            }, 400);
           })
-          .catch(err => log(err))
+          .catch(err => {
+            log(err);
+            this.toggleAlert(err, 'error');
+          })
       },
 
       save() {
@@ -151,9 +171,15 @@ document.addEventListener('DOMContentLoaded', () => {
           }))
             .then(resp => resp.text())
             .then(data => { log(data);
-              setTimeout(() => this.initialize(), 400)  //hack, couchdb to slow
+              setTimeout(() => {
+                this.initialize();
+                this.toggleAlert(data, 'success');
+              }, 400)  //hack, couchdb to slow
             })
-            .catch(err => log(err))
+            .catch(err => {
+              log(err);
+              this.toggleAlert(err, 'error');
+            });
         }
         else 
         {
@@ -167,8 +193,12 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(resp => resp.text())
             .then(data => { log(data);
               this.initialize();
+              this.toggleAlert(data, 'success');
             })
-            .catch(err => log(err))
+            .catch(err => {
+              log(err);
+              this.toggleAlert(err, 'error');
+            });
         }
         this.close()
       },

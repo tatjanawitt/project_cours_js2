@@ -13,6 +13,14 @@
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.8/dist/vuetify.min.css" rel="stylesheet">
 
   <style>
+    .v-application--wrap {
+      background: rgb(63,81,181);
+      background: linear-gradient(90deg, rgba(63,81,181,0.43422034341080185) 0%, rgba(63,81,181,0.15410829859287467) 100%);
+    }
+    .theme--light.v-card {
+      background: rgb(251,199,6);
+      background: linear-gradient(90deg, rgba(251,199,6,1) 0%, rgba(255,255,255,1) 100%);
+    }
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js" defer></script>
@@ -26,7 +34,7 @@
     <v-app id="inspire">
       <v-card class="mt-12 mx-auto" elevation="12">
         <v-card-title>
-          <span class="headline">Kontakte</span>
+          <span class="headline">{{ title.table }}</span>
           <v-spacer></v-spacer>
           <v-text-field 
             v-model="search" 
@@ -56,17 +64,24 @@
               <v-toolbar-title>{{ title.topic }}</v-toolbar-title>
               <v-divider class="mx-4" inset vertical></v-divider>
               <v-spacer></v-spacer>
+
               <v-dialog v-model="dialog" max-width="500px">
                 <template v-slot:activator="{ on }">                   
-                  <v-btn color="indigo" dark class="ma-2 mb-6 ml-2" v-on="on">
+                  <v-btn color="indigo" dark class="ma-2 mb-6 ml-2 elevation-5" v-on="on">
                     <v-icon dark>mdi-plus</v-icon>
                   </v-btn>                    
-                  <v-btn color="indigo" dark class="ma-2 mb-6 mr-2 ml-4" @click.native="openFileDialog">
+                  <v-btn color="indigo" dark class="ma-2 mb-6 mr-2 ml-4 elevation-5" @click.native="openFileDialog">
                     <v-icon dark>mdi-file-upload</v-icon>
                   </v-btn>
                   <form id="jsonfile">
                     <input type="file" name="fileimport" id="file-upload" style="display:none" multiple @change="onFileChange">
                   </form>
+                  <v-alert dense text class="elevation-5"
+                    transition="scale-transition"                   
+                    :type="alertType" 
+                    :value="alert"                    
+                    @click.native="toggleAlert"> {{ alertMsg }}
+                </v-alert>
                 </template>
                 <v-card>
                   <v-card-title>
