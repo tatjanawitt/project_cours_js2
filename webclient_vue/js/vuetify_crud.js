@@ -15,17 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
         {
           text: 'ID',
           align: 'left',
-          sortable: true,
           value: 'id',
         },
         { text: 'Vorname', value: 'firstname' },
         { text: 'Nachname', value: 'lastname' },
-        { text: 'Strasse', value: 'street' },
-        { text: 'Postleitzahl', value: 'postcode' },
+        { text: 'Strasse', value: 'street', sortable: false },
+        { text: 'Postleitzahl', value: 'postcode', sortable: false },
         { text: 'Ort', value: 'place' },
         { text: 'Email', value: 'email' },
-        { text: 'Fon', value: 'fon' },
-        { text: 'Mobil', value: 'mobil' },
+        { text: 'Fon', value: 'fon', sortable: false },
+        { text: 'Mobil', value: 'mobil', sortable: false },
         { text: 'Actions', value: 'action', sortable: false },
       ],
       url: '/api/contacts',
@@ -86,6 +85,13 @@ document.addEventListener('DOMContentLoaded', () => {
           .then(result => result.json())
           .then(result => this.contacts = result)
           .catch(console.log)
+      },
+
+      getColor (email) {
+        if (email) return 'indigo';
+        //else if (calories > 200) return 'orange'
+        //else return 'green'
+        return 'indigo';
       },
 
       editItem(item) {

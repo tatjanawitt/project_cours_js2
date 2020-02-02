@@ -22,147 +22,155 @@
 </head>
 
 <body>
-  <div id="app">
-    <div id="app">
-      <v-app id="inspire">
-        <v-card>
-          <v-card-title>
-            <span class="headline">Kontaktliste</span>
-            <v-spacer></v-spacer>
-            <v-text-field 
-              v-model="search" 
-              append-icon="search" 
-              label="filtern">
-            </v-text-field>
-          </v-card-title>
-          <v-data-table 
-            :headers="headers" 
-            :items="contacts" 
-            :search="search" 
-            :items-per-page="10" 
-            sort-by="id"
-            class="elevation-1">
-            <template v-slot:top>
-              <v-toolbar flat color="white">
-                <v-toolbar-title>{{ title.topic }}</v-toolbar-title>
-                <v-divider class="mx-4" inset vertical></v-divider>
-                <v-spacer></v-spacer>
-                <v-dialog v-model="dialog" max-width="500px">
-                  <template v-slot:activator="{ on }">                   
-                    <v-btn color="indigo" dark class="ma-2 mb-6 ml-2" v-on="on">
-                      <v-icon dark>mdi-plus</v-icon>
-                    </v-btn>                    
-                    <v-btn color="indigo" dark class="ma-2 mb-6 mr-2 ml-4" @click.native="openFileDialog">
-                      <v-icon dark>mdi-file-upload</v-icon>
-                    </v-btn>
-                    <form id="jsonfile">
-                      <input type="file" name="fileimport" id="file-upload" style="display:none" multiple @change="onFileChange">
-                    </form>
-                  </template>
-                  <v-card>
-                    <v-card-title>
-                      <span class="headline">{{ formTitle }}
-                        {{ editedItem.id ? editedItem.id : '' }}</span>
-                    </v-card-title>
+  <div id="app">  
+    <v-app id="inspire">
+      <v-card class="mt-12 mx-auto" elevation="12">
+        <v-card-title>
+          <span class="headline">Kontakte</span>
+          <v-spacer></v-spacer>
+          <v-text-field 
+            v-model="search" 
+            append-icon="search" 
+            label="filtern"
+            single-line
+            hide-details>
+          </v-text-field>
+        </v-card-title>
+        <v-data-table   
+          :headers="headers" 
+          :items="contacts" 
+          :search="search" 
+          :items-per-page="10" 
+          sort-by="id"
+          :sort-by="['id']"
+          :sort-desc="[true]"
+          multi-sort
+          class="elevation-1">
+          <template v-slot:item.email="{ item }">
+            <v-chip v-if="item.email"class="ma-2" label outlined :color="getColor(item.email)">
+              <v-icon left>mdi-email</v-icon>{{ item.email }}
+            </v-chip>
+          </template>
+          <template v-slot:top>
+            <v-toolbar flat color="white">
+              <v-toolbar-title>{{ title.topic }}</v-toolbar-title>
+              <v-divider class="mx-4" inset vertical></v-divider>
+              <v-spacer></v-spacer>
+              <v-dialog v-model="dialog" max-width="500px">
+                <template v-slot:activator="{ on }">                   
+                  <v-btn color="indigo" dark class="ma-2 mb-6 ml-2" v-on="on">
+                    <v-icon dark>mdi-plus</v-icon>
+                  </v-btn>                    
+                  <v-btn color="indigo" dark class="ma-2 mb-6 mr-2 ml-4" @click.native="openFileDialog">
+                    <v-icon dark>mdi-file-upload</v-icon>
+                  </v-btn>
+                  <form id="jsonfile">
+                    <input type="file" name="fileimport" id="file-upload" style="display:none" multiple @change="onFileChange">
+                  </form>
+                </template>
+                <v-card>
+                  <v-card-title>
+                    <span class="headline">{{ formTitle }}
+                      {{ editedItem.id ? editedItem.id : '' }}</span>
+                  </v-card-title>
 
-                    <v-card-text>
-                      <v-container>
-                        <v-row>
-                          <v-col cols="12" sm="6">
-                            <v-text-field 
-                              v-model="editedItem.firstname" 
-                              label="Vorname" 
-                              counter="25"
-                              :hint="msg.counter"></v-text-field>
-                          </v-col>
-                          <v-col cols="12" sm="6">
-                            <v-text-field 
-                              v-model="editedItem.lastname" 
-                              label="Nachname" 
-                              counter="25"
-                              :hint="msg.counter"></v-text-field>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="12" sm="12">
-                            <v-text-field 
-                              v-model="editedItem.street" 
-                              label="Straße" 
-                              counter="75" 
-                              :hint="msg.counter">
-                            </v-text-field>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="12" sm="4">
-                            <v-text-field 
-                              v-model="editedItem.postcode" 
-                              label="Postleitzahl" 
-                              counter="5"
-                              :hint="msg.counter"></v-text-field>
-                          </v-col>
-                          <v-col cols="12" sm="8">
-                            <v-text-field 
-                              v-model="editedItem.place" 
-                              label="Ort" 
-                              counter="50" 
-                              :hint="msg.counter">
-                            </v-text-field>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="12" sm="12">
-                            <v-text-field 
-                              v-model="editedItem.email" 
-                              label="Email" 
-                              counter="100" 
-                              :hint="msg.counter">
-                            </v-text-field>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="12" sm="6">
-                            <v-text-field 
-                              v-model="editedItem.fon" 
-                              label="Fon" 
-                              counter="30"
-                              hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
-                          </v-col>
-                          <v-col cols="12" sm="6">
-                            <v-text-field 
-                              v-model="editedItem.mobil" 
-                              label="Mobil" 
-                              counter="30"
-                              hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-card-text>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12" sm="6">
+                          <v-text-field 
+                            v-model="editedItem.firstname" 
+                            label="Vorname" 
+                            counter="25"
+                            :hint="msg.counter"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6">
+                          <v-text-field 
+                            v-model="editedItem.lastname" 
+                            label="Nachname" 
+                            counter="25"
+                            :hint="msg.counter"></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="12" sm="12">
+                          <v-text-field 
+                            v-model="editedItem.street" 
+                            label="Straße" 
+                            counter="75" 
+                            :hint="msg.counter">
+                          </v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="12" sm="4">
+                          <v-text-field 
+                            v-model="editedItem.postcode" 
+                            label="Postleitzahl" 
+                            counter="5"
+                            :hint="msg.counter"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="8">
+                          <v-text-field 
+                            v-model="editedItem.place" 
+                            label="Ort" 
+                            counter="50" 
+                            :hint="msg.counter">
+                          </v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="12" sm="12">
+                          <v-text-field 
+                            v-model="editedItem.email" 
+                            label="Email" 
+                            counter="100" 
+                            :hint="msg.counter">
+                          </v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="12" sm="6">
+                          <v-text-field 
+                            v-model="editedItem.fon" 
+                            label="Fon" 
+                            counter="30"
+                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6">
+                          <v-text-field 
+                            v-model="editedItem.mobil" 
+                            label="Mobil" 
+                            counter="30"
+                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
 
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                      <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-              </v-toolbar>
-            </template>
-            <template v-slot:item.action="{ item }">
-              <v-icon color="indigo" class="mr-3" @click="editItem(item)">
-                edit
-              </v-icon>
-              <v-icon color="red" @click="deleteItem(item)">
-                delete
-              </v-icon>
-            </template>
-            <template v-slot:no-data>
-              <v-btn color="indigo" dark class="ma-2" @click="initialize">Reset</v-btn>
-            </template>
-          </v-data-table>
-        </v-card>
-      </v-app>
-    </div>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                    <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-toolbar>
+          </template>
+          <template v-slot:item.action="{ item }">
+            <v-icon color="indigo" class="mr-3" @click="editItem(item)">
+              edit
+            </v-icon>
+            <v-icon color="red" @click="deleteItem(item)">
+              delete
+            </v-icon>
+          </template>
+          <template v-slot:no-data>
+            <v-btn color="indigo" dark class="ma-2" @click="initialize">Reset</v-btn>
+          </template>
+        </v-data-table>
+      </v-card>
+    </v-app>
 
   </div>
 </body>
