@@ -4,7 +4,7 @@ const log = console.log;
 const express = require ( 'express' );
 const bodyParser = require('body-parser');
 const nocache = require('nocache')
-const routes = require('./api/controllers/routes');
+const routes = require('./api/routes');
 
 const app = express();
 

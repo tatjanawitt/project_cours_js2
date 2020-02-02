@@ -1,6 +1,6 @@
 'use strict';
 const express = require('express');
-const contactCtl = require('./contact')
+const contactCtl = require('./controllers/contact')
 
 const router = express.Router();
 
