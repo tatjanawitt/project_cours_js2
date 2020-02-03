@@ -4,11 +4,13 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   let log = console.log;
+  const httpHeader = { 'content-type': 'application/json' };
 
   new Vue({
     el: '#app',
     vuetify: new Vuetify(),
     data: () => ({
+      url: '/api/contacts',
       dialog: false,
       search: '',
       alert: false,
@@ -16,26 +18,17 @@ document.addEventListener('DOMContentLoaded', () => {
       alertType: 'success',
       alertTimeouts: [],
       headers: [
-        { text: 'ID', value: 'id', align: 'left' },
-        { text: 'Vorname', value: 'firstname' },
-        { text: 'Nachname', value: 'lastname' },
-        { text: 'Strasse', value: 'street', sortable: false },
-        { text: 'Postleitzahl', value: 'postcode', sortable: false },
-        { text: 'Ort', value: 'place' },
-        { text: 'Email', value: 'email' },
-        { text: 'Fon', value: 'fon', sortable: false },
-        { text: 'Mobil', value: 'mobil', sortable: false },
+        { text: 'ID', value: 'id', align: 'left', sortable: true },
+        { text: 'Vorname', value: 'firstname', sortable: true, max: '30' },
+        { text: 'Nachname', value: 'lastname', sortable: true, max: '30' },
+        { text: 'Strasse', value: 'street', sortable: false, max: '50' },
+        { text: 'Postleitzahl', value: 'postcode', sortable: false, max: '5' },
+        { text: 'Ort', value: 'place', sortable: true, max: '50' },
+        { text: 'Email', value: 'email', sortable: true, max: '50' },
+        { text: 'Fon', value: 'fon', sortable: false, max: '30' },
+        { text: 'Mobil', value: 'mobil', sortable: false, max: '30' },
         { text: 'Actions', value: 'action', sortable: false },
       ],
-      url: '/api/contacts',
-
-      valid: true,
-      nameRules: [
-        v => !!v || 'Pflichtfeld',
-        v => (v && v.length >= 3) || 'Min 3 Zeichen',
-        v => (v && v.length <= 25) || 'Max 25 Zeichen',
-      ],
-
       contacts: [],
       editedIndex: -1,
       editedItem: {
@@ -60,6 +53,19 @@ document.addEventListener('DOMContentLoaded', () => {
         fon: '',
         mobil: '',
       },
+      valid: true,
+      nameRules: [
+        v => !!v || 'Pflichtfeld',
+        v => (v && v.length >= 3) || 'Min 3 Zeichen'
+      ],
+      emailRules: [
+        v => !!v || 'Pflichtfeld',
+        v => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail muss gültig sein'
+      ],
+      zipRules: [
+        v => (v && /^[0-9]{5}$/) || 'PLZ muss 5-stellig sein',
+        v => (v && v.length <= 5) || 'Max 5 Zeichen',
+      ],
       title: {
         add: 'Kontakt anlegen:',
         edit: 'Kontakt editieren: ID#',
@@ -69,12 +75,15 @@ document.addEventListener('DOMContentLoaded', () => {
         cancel: 'Abbrechen',
         newRec: 'Hinzufügen',
         uploadJson: 'Importieren',
-        searchItem: 'Tabelle filtern'
+        resetBtn: 'Daten laden',
+        searchItem: 'Tabelle filtern',
+        requiredField: '* Pflichtfelder',
       },
       msg: {
         counter: 'eingefügte Zeichen',
         del: ' - Sollen die Daten gelöscht werden ?'
       },
+      btnColor: 'rgba(78,95,187,0.8)',
     }),
 
     computed: {
@@ -150,8 +159,8 @@ document.addEventListener('DOMContentLoaded', () => {
       close() {
         this.dialog = false;
         this.valid = true;
-        this.$refs.formi.reset();
-        this.$refs.formi.resetValidation();        
+        this.$refs.form.reset();
+        this.$refs.form.resetValidation();
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
@@ -179,12 +188,12 @@ document.addEventListener('DOMContentLoaded', () => {
       },
 
       save() {
-        if (this.$refs.formi.validate()) {
+        if (this.$refs.form.validate()) {
           if (this.editedIndex > -1) {
             log('editID: ', this.editedItem.id)
             fetch(new Request(`${this.url}/${this.editedItem.id}`, {
               method: 'put',
-              headers: { 'content-type': 'application/json' },
+              headers: httpHeader,
               body: JSON.stringify(this.editedItem)
             }))
               .then(resp => resp.text())
@@ -201,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
             delete this.editedItem['id'];
             fetch(new Request(this.url, {
               method: 'post',
-              headers: { 'content-type': 'application/json' },
+              headers: httpHeader,
               body: JSON.stringify(this.editedItem)
             }))
               .then(resp => resp.text())

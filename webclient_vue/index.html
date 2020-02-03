@@ -45,6 +45,7 @@
             hide-details>
           </v-text-field>
         </v-card-title>
+
         <!-- Tabelle -->
         <v-data-table   
           :headers="headers" 
@@ -55,7 +56,8 @@
           :sort-desc="[true]"
           multi-sort
           class="elevation-1">
-          <!-- Sots und modaler Dialog -->
+
+          <!-- Modaler Dialog -->
           <template v-slot:top>
             <v-toolbar flat color="rgba(250,235,215,0.5">
               <v-toolbar-title>{{ title.topic }}</v-toolbar-title>
@@ -65,11 +67,11 @@
               <v-dialog v-model="dialog"  persistent max-width="800px">
 
                 <template v-slot:activator="{ on }">                   
-                  <v-btn color="rgba(78,95,187,0.8)" dark class="ma-2 mb-6 ml-2 elevation-5" v-on="on">
+                  <v-btn :color="btnColor" dark class="ma-2 mb-6 ml-2 elevation-5" v-on="on">
                     <v-icon dark>mdi-plus</v-icon> {{ title.newRec }}
                   </v-btn>
                     
-                  <v-btn color="rgba(78,95,187,0.8)" dark class="ma-2 mb-6 mr-2 ml-4 elevation-5" @click.native="openFileDialog">
+                  <v-btn :color="btnColor" dark class="ma-2 mb-6 mr-2 ml-4 elevation-5" @click.native="openFileDialog">
                     <v-icon dark>mdi-file-upload</v-icon> {{ title.uploadJson }}
                   </v-btn>
                   <form id="jsonfile">
@@ -84,123 +86,141 @@
                   </v-alert>
                 </template>
 
+                <!-- Formular-Felder -->
                 <v-card>
                   <v-card-title>
                     <span class="headline">{{ formTitle }} {{ editedItem.id ? editedItem.id : '' }}</span>
                   </v-card-title>
-                  <v-form ref="formi" v-model="valid" lazy-validation>
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="6">
-                          <v-text-field 
-                            v-model="editedItem.firstname" 
-                            :label="headers[1].text + '*'" 
-                            counter="25"
-                            :rules="nameRules"
-                            validate-on-blur
-                            :hint="msg.counter" required></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6">
-                          <v-text-field 
-                            v-model="editedItem.lastname" 
-                            :label="headers[2].text"
-                            counter="25"
-                            :rules="nameRules"
-                            validate-on-blur                       
-                            :hint="msg.counter"></v-text-field>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="12" sm="12">
-                          <v-text-field 
-                            v-model="editedItem.street" 
-                            :label="headers[3].text" 
-                            counter="75"
-                            
-                            validate-on-blur
-                            :hint="msg.counter">
-                          </v-text-field>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="12" sm="4">
-                          <v-text-field 
-                            v-model="editedItem.postcode" 
-                            :label="headers[4].text" 
-                            counter="5"
-                            :hint="msg.counter"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="8">
-                          <v-text-field 
-                            v-model="editedItem.place" 
-                            :label="headers[5].text" 
-                            counter="50" 
-                            :hint="msg.counter">
-                          </v-text-field>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="12" sm="12">
-                          <v-text-field 
-                            v-model="editedItem.email" 
-                            :label="headers[6].text" 
-                            counter="100" 
-                            :hint="msg.counter">
-                          </v-text-field>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="12" sm="6">
-                          <v-text-field 
-                            v-model="editedItem.fon" 
-                            :label="headers[7].text" 
-                            counter="30"
-                            :hint="msg.counter"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6">
-                          <v-text-field 
-                            v-model="editedItem.mobil" 
-                            :label="headers[8].text" 
-                            counter="30"
-                            :hint="msg.counter"></v-text-field>
-                        </v-col>
-                      </v-row>
-                      <small>*Pflichtfelder</small>
-                    </v-container>                    
-                  </v-card-text>
+                  <v-form ref="form" v-model="valid" lazy-validation>
+                    <v-card-text>
+                      <v-container>
+                        <v-row>
+                          <v-col cols="12" sm="6">
+                            <v-text-field 
+                              required
+                              v-model="editedItem.firstname" 
+                              :label="headers.find(i => i.value === 'firstname').text + '*'"
+                              :maxlength="headers.find(i => i.value === 'firstname').max"
+                              :counter="headers.find(i => i.value === 'firstname').max"
+                              :rules="nameRules"
+                              validate-on-blur
+                              :hint="msg.counter"></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="6">
+                            <v-text-field 
+                              required
+                              v-model="editedItem.lastname" 
+                              :label="headers.find(i => i.value === 'lastname').text + '*'"
+                              :maxlength="headers.find(i => i.value === 'lastname').max"
+                              :counter="headers.find(i => i.value === 'lastname').max"
+                              :rules="nameRules"
+                              validate-on-blur                       
+                              :hint="msg.counter"></v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="12">
+                            <v-text-field 
+                              v-model="editedItem.street" 
+                              :label="headers.find(i => i.value === 'street').text"
+                              :maxlength="headers.find(i => i.value === 'street').max"
+                              :counter="headers.find(i => i.value === 'street').max"
+                              :hint="msg.counter">
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="4">
+                            <v-text-field 
+                              v-model="editedItem.postcode" 
+                              :label="headers.find(i => i.value === 'postcode').text"
+                              :maxlength="headers.find(i => i.value === 'postcode').max"
+                              :size="headers.find(i => i.value === 'postcode').max"
+                              pattern="[0-9]{5}"
+                              :counter="headers.find(i => i.value === 'postcode').max"
+                              :rules="zipRules"
+                              validate-on-blur
+                              :hint="msg.counter"></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="8">
+                            <v-text-field 
+                              v-model="editedItem.place" 
+                              :label="headers.find(i => i.value === 'place').text"
+                              :maxlength="headers.find(i => i.value === 'place').max"
+                              :counter="headers.find(i => i.value === 'place').max"
+                              :hint="msg.counter">
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="12">
+                            <v-text-field 
+                              required
+                              v-model="editedItem.email" 
+                              :label="headers.find(i => i.value === 'email').text + '*'"
+                              :maxlength="headers.find(i => i.value === 'email').max" 
+                              :counter="headers.find(i => i.value === 'email').max"
+                              :rules="emailRules"
+                              validate-on-blur
+                              :hint="msg.counter">
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="6">
+                            <v-text-field 
+                              v-model="editedItem.fon" 
+                              :label="headers.find(i => i.value === 'fon').text"
+                              :maxlength="headers.find(i => i.value === 'fon').max"
+                              :counter="headers.find(i => i.value === 'fon').max"
+                              :hint="msg.counter"></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="6">
+                            <v-text-field 
+                              v-model="editedItem.mobil" 
+                              :label="headers.find(i => i.value === 'mobil').text"
+                              :maxlength="headers.find(i => i.value === 'mobil').max"
+                              :counter="headers.find(i => i.value === 'mobil').max"
+                              :hint="msg.counter"></v-text-field>
+                          </v-col>
+                        </v-row>
+                        <small color="red">{{ requiredField }}</small>
+                      </v-container>                    
+                    </v-card-text>
 
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn 
-                      color="rgba(78,95,187,0.8)" 
-                      dark text 
-                      class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
-                      @click="close">
-                      <v-icon dark>mdi-close-circle</v-icon> {{ title.cancel }}
-                    </v-btn>
-                    <v-btn 
-                      :disabled="!valid"
-                      color="rgba(78,95,187,0.8)" 
-                      text
-                      class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
-                      @click="save">
-                        <v-icon dark>mdi-content-save-edit</v-icon> {{ title.saveRec }}
-                    </v-btn>
-                  </v-card-actions>
+                    <!-- Formular-Buttons -->
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn 
+                        :color="btnColor" 
+                        dark text 
+                        class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
+                        @click="close">
+                          <v-icon dark>mdi-close-circle</v-icon> {{ title.cancel }}
+                      </v-btn>
+                      <v-btn 
+                        :disabled="!valid"
+                        :color="btnColor" 
+                        text
+                        class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
+                        @click="save">
+                          <v-icon dark>mdi-content-save-edit</v-icon> {{ title.saveRec }}
+                      </v-btn>
+                    </v-card-actions>
                   </v-form>
                 </v-card>
               </v-dialog>
             </v-toolbar>
           </template>
 
+          <!-- Sots für Tabelle (Edit, Delete, etc.) -->
           <template v-slot:item.action="{ item }">
-            <v-icon color="rgba(78,95,187,0.8)" class="mr-3" @click="editItem(item)">edit</v-icon>
-            <v-icon color="rgba(78,95,187,0.8)" @click="deleteItem(item)">delete</v-icon>
+            <v-icon :color="btnColor" class="mr-3" @click="editItem(item)">edit</v-icon>
+            <v-icon :color="btnColor" @click="deleteItem(item)">delete</v-icon>
           </template>
 
           <template v-slot:no-data>
-            <v-btn color="indigo" dark class="ma-2" @click="initialize">Reset</v-btn>
+            <v-btn :color="btnColor" dark class="ma-2" @click="initialize">{{ title.resetBtn }}</v-btn>
           </template>
 
           <!-- Test mit email adresse -->
