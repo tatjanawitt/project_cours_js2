@@ -18,8 +18,8 @@
       background: linear-gradient(90deg, rgba(63,81,181,0.43422034341080185) 0%, rgba(63,81,181,0.15410829859287467) 100%);
     }
     .theme--light.v-card {
-      background: rgb(251,199,6);
-      background: linear-gradient(90deg, rgba(251,199,6,1) 0%, rgba(255,255,255,1) 100%);
+      background: rgb(250,235,215);
+      background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(250,235,215,1) 100%);
     }
   </style>
 
@@ -32,6 +32,7 @@
 <body>
   <div id="app">  
     <v-app id="inspire">
+      <!-- Kopf und Suchfeld -->
       <v-card class="mt-12 mx-auto" elevation="12">
         <v-card-title>
           <span class="headline">{{ title.table }}</span>
@@ -39,71 +40,74 @@
           <v-text-field 
             v-model="search" 
             append-icon="search" 
-            label="filtern"
+            :label="title.searchItem"
             single-line
             hide-details>
           </v-text-field>
         </v-card-title>
+        <!-- Tabelle -->
         <v-data-table   
           :headers="headers" 
           :items="contacts" 
           :search="search" 
-          :items-per-page="5" 
-          sort-by="id"
+          :items-per-page="10" 
           :sort-by="['id']"
           :sort-desc="[true]"
           multi-sort
           class="elevation-1">
-          <template v-slot:item.email="{ item }">
-            <v-chip v-if="item.email"class="ma-2" label outlined :color="getColor(item.email)">
-              <v-icon left>mdi-email</v-icon>{{ item.email }}
-            </v-chip>
-          </template>
+          <!-- Sots und modaler Dialog -->
           <template v-slot:top>
-            <v-toolbar flat color="white">
+            <v-toolbar flat color="rgba(250,235,215,0.5">
               <v-toolbar-title>{{ title.topic }}</v-toolbar-title>
               <v-divider class="mx-4" inset vertical></v-divider>
               <v-spacer></v-spacer>
 
-              <v-dialog v-model="dialog" max-width="500px">
+              <v-dialog v-model="dialog"  persistent max-width="800px">
+
                 <template v-slot:activator="{ on }">                   
-                  <v-btn color="indigo" dark class="ma-2 mb-6 ml-2 elevation-5" v-on="on">
-                    <v-icon dark>mdi-plus</v-icon>
-                  </v-btn>                    
-                  <v-btn color="indigo" dark class="ma-2 mb-6 mr-2 ml-4 elevation-5" @click.native="openFileDialog">
-                    <v-icon dark>mdi-file-upload</v-icon>
+                  <v-btn color="rgba(78,95,187,0.8)" dark class="ma-2 mb-6 ml-2 elevation-5" v-on="on">
+                    <v-icon dark>mdi-plus</v-icon> {{ title.newRec }}
+                  </v-btn>
+                    
+                  <v-btn color="rgba(78,95,187,0.8)" dark class="ma-2 mb-6 mr-2 ml-4 elevation-5" @click.native="openFileDialog">
+                    <v-icon dark>mdi-file-upload</v-icon> {{ title.uploadJson }}
                   </v-btn>
                   <form id="jsonfile">
-                    <input type="file" name="fileimport" id="file-upload" style="display:none" multiple @change="onFileChange">
+                    <input type="file" name="fileimport" id="file-upload" style="display:none"  @change="onFileChange">
                   </form>
+
                   <v-alert dense text class="elevation-5"
                     transition="scale-transition"                   
                     :type="alertType" 
                     :value="alert"                    
-                    @click.native="toggleAlert"> {{ alertMsg }}
-                </v-alert>
+                    @click.native="toggleAlert('')"> {{ alertMsg }}
+                  </v-alert>
                 </template>
+
                 <v-card>
                   <v-card-title>
-                    <span class="headline">{{ formTitle }}
-                      {{ editedItem.id ? editedItem.id : '' }}</span>
+                    <span class="headline">{{ formTitle }} {{ editedItem.id ? editedItem.id : '' }}</span>
                   </v-card-title>
-
+                  <v-form ref="formi" v-model="valid" lazy-validation>
                   <v-card-text>
                     <v-container>
                       <v-row>
                         <v-col cols="12" sm="6">
                           <v-text-field 
                             v-model="editedItem.firstname" 
-                            label="Vorname" 
+                            :label="headers[1].text + '*'" 
                             counter="25"
-                            :hint="msg.counter"></v-text-field>
+                            :rules="nameRules"
+                            validate-on-blur
+                            :hint="msg.counter" required></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6">
                           <v-text-field 
                             v-model="editedItem.lastname" 
-                            label="Nachname" 
+                            :label="headers[2].text"
                             counter="25"
+                            :rules="nameRules"
+                            validate-on-blur                       
                             :hint="msg.counter"></v-text-field>
                         </v-col>
                       </v-row>
@@ -111,8 +115,10 @@
                         <v-col cols="12" sm="12">
                           <v-text-field 
                             v-model="editedItem.street" 
-                            label="Straße" 
-                            counter="75" 
+                            :label="headers[3].text" 
+                            counter="75"
+                            
+                            validate-on-blur
                             :hint="msg.counter">
                           </v-text-field>
                         </v-col>
@@ -121,14 +127,14 @@
                         <v-col cols="12" sm="4">
                           <v-text-field 
                             v-model="editedItem.postcode" 
-                            label="Postleitzahl" 
+                            :label="headers[4].text" 
                             counter="5"
                             :hint="msg.counter"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="8">
                           <v-text-field 
                             v-model="editedItem.place" 
-                            label="Ort" 
+                            :label="headers[5].text" 
                             counter="50" 
                             :hint="msg.counter">
                           </v-text-field>
@@ -138,7 +144,7 @@
                         <v-col cols="12" sm="12">
                           <v-text-field 
                             v-model="editedItem.email" 
-                            label="Email" 
+                            :label="headers[6].text" 
                             counter="100" 
                             :hint="msg.counter">
                           </v-text-field>
@@ -148,40 +154,60 @@
                         <v-col cols="12" sm="6">
                           <v-text-field 
                             v-model="editedItem.fon" 
-                            label="Fon" 
+                            :label="headers[7].text" 
                             counter="30"
-                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                            :hint="msg.counter"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6">
                           <v-text-field 
                             v-model="editedItem.mobil" 
-                            label="Mobil" 
+                            :label="headers[8].text" 
                             counter="30"
-                            hint="Dieses Feld enthält einen Zeichenzähler"></v-text-field>
+                            :hint="msg.counter"></v-text-field>
                         </v-col>
                       </v-row>
-                    </v-container>
+                      <small>*Pflichtfelder</small>
+                    </v-container>                    
                   </v-card-text>
 
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                    <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                    <v-btn 
+                      color="rgba(78,95,187,0.8)" 
+                      dark text 
+                      class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
+                      @click="close">
+                      <v-icon dark>mdi-close-circle</v-icon> {{ title.cancel }}
+                    </v-btn>
+                    <v-btn 
+                      :disabled="!valid"
+                      color="rgba(78,95,187,0.8)" 
+                      text
+                      class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
+                      @click="save">
+                        <v-icon dark>mdi-content-save-edit</v-icon> {{ title.saveRec }}
+                    </v-btn>
                   </v-card-actions>
+                  </v-form>
                 </v-card>
               </v-dialog>
             </v-toolbar>
           </template>
+
           <template v-slot:item.action="{ item }">
-            <v-icon color="indigo" class="mr-3" @click="editItem(item)">
-              edit
-            </v-icon>
-            <v-icon color="red" @click="deleteItem(item)">
-              delete
-            </v-icon>
+            <v-icon color="rgba(78,95,187,0.8)" class="mr-3" @click="editItem(item)">edit</v-icon>
+            <v-icon color="rgba(78,95,187,0.8)" @click="deleteItem(item)">delete</v-icon>
           </template>
+
           <template v-slot:no-data>
             <v-btn color="indigo" dark class="ma-2" @click="initialize">Reset</v-btn>
+          </template>
+
+          <!-- Test mit email adresse -->
+          <template v-slot:item.email="{ item }">
+            <v-chip v-if="item.email"class="ma-2" label outlined :color="getColor(item.email)">
+              <v-icon left>mdi-email</v-icon>{{ item.email }}
+            </v-chip>
           </template>
         </v-data-table>
       </v-card>

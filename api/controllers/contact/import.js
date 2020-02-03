@@ -50,7 +50,7 @@ module.exports = (req, res) => {
             files.forEach(file => promises.push(fileToObj(file)))
             Promise.all(promises)
                 .then(res => importToDB(res[0]))
-                .then(() => res.send('Daten importiert!'))
+                .then(() => res.send('Daten sind in die Tabelle importiert!'))
                 .catch(err => res.send('error: '+ err))
         }
     })

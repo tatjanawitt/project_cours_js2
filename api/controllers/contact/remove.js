@@ -9,7 +9,7 @@ module.exports = (req, res) => {
 
   const delRecord = (id, rev) => {
     db.destroy(id, rev)
-      .then(resp => res.send('Daten gelöscht! ID:' + resp.id ))
+      .then(resp => res.send('ID:' + resp.id + ' - Daten sind gelöscht!'))
       .catch(err => res.send('error: '+ err));
   }
 
