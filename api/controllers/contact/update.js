@@ -10,7 +10,7 @@ module.exports = (req, res) => {
 
   const save = data => {
     db.insert(data)
-      .then(resp => res.send('ID:' + resp.id +' - Daten sind geändert!' ))
+      .then(resp => res.send('# ' + resp.id +' - Daten sind geändert!' ))
       .catch(err => res.send('error: '+ err));
   }
 

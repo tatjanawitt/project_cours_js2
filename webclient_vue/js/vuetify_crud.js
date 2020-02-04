@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const httpHeader = { 'content-type': 'application/json' };
   const lableText = {
     add: 'Kontakt anlegen:',
-    edit: 'Kontakt editieren: ID#',
+    edit: 'Kontakt editieren: #',
     topic: 'Übersicht',
     table: 'Kontakte',
     saveRec: 'Speichern',
@@ -22,15 +22,15 @@ document.addEventListener('DOMContentLoaded', () => {
     newRec: 'Hinzufügen',
     uploadJson: 'Importieren',
     resetBtn: 'Daten laden',
-    searchItem: 'Tabelle filtern',
+    searchItem: 'Kontakte filtern',
     requiredField: 'Pflichtfeld',
     counter: 'eingefügte Zeichen',
-    del: 'Kontakt löschen: ID#',
+    del: 'Kontakt löschen: #',
     delRec: 'Löschen',
     delQuestion: 'Wollen Sie den Kontakt wirklich löschen?',
     nameRuleLabel: 'Min 3 Zeichen',
     emailRuleLabel: 'E-mail muss gültig sein',
-    zipRuleLabel: 'PLZ muss 5-stellige Zahl sein'
+    zipRuleLabel: 'Min 5 Zahlen'
   }
   const contactObj = {
     id: '',
@@ -59,14 +59,14 @@ document.addEventListener('DOMContentLoaded', () => {
       alertTimeouts: [],
       btnColor: 'rgba(78,95,187,0.8)',
       headers: [
-        { text: 'ID', value: 'id', align: 'left', sortable: true },
+        { text: '# Id', value: 'id', align: 'left', sortable: true },
         { text: 'Vorname', value: 'firstname', sortable: true, max: '30' },
         { text: 'Nachname', value: 'lastname', sortable: true, max: '30' },
+        { text: 'Email', value: 'email', sortable: true, max: '50' },
         { text: 'Strasse', value: 'street', sortable: false, max: '50' },
         { text: 'Postleitzahl', value: 'postcode', sortable: false, max: '5' },
-        { text: 'Ort', value: 'place', sortable: true, max: '50' },
-        { text: 'Email', value: 'email', sortable: true, max: '50' },
-        { text: 'Fon', value: 'fon', sortable: false, max: '30' },
+        { text: 'Ort', value: 'place', sortable: true, max: '50' },        
+        { text: 'Telefon', value: 'fon', sortable: false, max: '30' },
         { text: 'Mobil', value: 'mobil', sortable: false, max: '30' },
         { text: 'Actions', value: 'action', sortable: false },
       ],
@@ -241,9 +241,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // Beispiel zum ändern von css
       getColor(email) {
         if (email) return 'rgba(78,95,187,0.8)';
-        //else if (calories > 200) return 'orange'
-        //else return 'green'
-        return 'indigo';
       }
     },
   })
