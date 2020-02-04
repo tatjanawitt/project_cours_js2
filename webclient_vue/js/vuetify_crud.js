@@ -237,10 +237,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!msg && !this.alert) delTimeouts();
       },
 
-
-      // Beispiel zum ändern von css
-      getColor(email) {
-        if (email) return 'rgba(78,95,187,0.8)';
+      getEmailLink(email) {
+        if (email) return 'mailto:' + email;
       }
     },
   })

@@ -245,13 +245,14 @@
             <v-btn :color="btnColor" dark class="ma-2" @click="initialize">{{ text.resetBtn }}</v-btn>
           </template>
 
-          <!-- Test mit email adresse -->
           <template v-slot:item.email="{ item }">
-            <v-chip v-if="item.email"class="ma-2" label outlined :color="getColor(item.email)">
-              <a href="mailto:{item.email}" :color="getColor(item.email)"><v-icon left>mdi-email</v-icon>{{ item.email }}</a>
-              
+            <v-chip v-if="item.email"
+              class="ma-2" outlined label :color="btnColor" 
+              :href="getEmailLink(item.email)">
+              <v-icon left>mdi-email</v-icon>{{ item.email }}              
             </v-chip>
           </template>
+
         </v-data-table>
       </v-card>
     </v-app>
