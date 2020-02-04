@@ -11,16 +11,9 @@
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.8/dist/vuetify.min.css" rel="stylesheet">
+  <link href="./css/style.css" rel="stylesheet">
 
   <style>
-    .v-application--wrap {
-      background: rgb(63,81,181);
-      background: linear-gradient(90deg, rgba(63,81,181,0.43422034341080185) 0%, rgba(63,81,181,0.15410829859287467) 100%);
-    }
-    .theme--light.v-card {
-      background: rgb(250,235,215);
-      background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(250,235,215,1) 100%);
-    }
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js" defer></script>
@@ -35,12 +28,12 @@
       <!-- Kopf und Suchfeld -->
       <v-card class="mt-12 mx-auto" elevation="12">
         <v-card-title>
-          <span class="headline">{{ title.table }}</span>
+          <span class="headline">{{ text.table }}</span>
           <v-spacer></v-spacer>
           <v-text-field 
             v-model="search" 
-            append-icon="search" 
-            :label="title.searchItem"
+            append-icon="mdi-account-search" 
+            :label="text.searchItem"
             single-line
             hide-details>
           </v-text-field>
@@ -51,7 +44,7 @@
           :headers="headers" 
           :items="contacts" 
           :search="search" 
-          :items-per-page="10" 
+          :items-per-page="rowsPerPage" 
           :sort-by="['id']"
           :sort-desc="[true]"
           multi-sort
@@ -60,7 +53,10 @@
           <!-- Modaler Dialog -->
           <template v-slot:top>
             <v-toolbar flat color="rgba(250,235,215,0.5">
-              <v-toolbar-title>{{ title.topic }}</v-toolbar-title>
+              <v-toolbar-title>
+                <v-icon>mdi-account-multiple-outline</v-icon>
+                {{ text.topic }}
+              </v-toolbar-title>
               <v-divider class="mx-4" inset vertical></v-divider>
               <v-spacer></v-spacer>
 
@@ -68,17 +64,17 @@
 
                 <template v-slot:activator="{ on }">                   
                   <v-btn :color="btnColor" dark class="ma-2 mb-6 ml-2 elevation-5" v-on="on">
-                    <v-icon dark>mdi-plus</v-icon> {{ title.newRec }}
+                    <v-icon dark>mdi-plus</v-icon> {{ text.newRec }}
                   </v-btn>
                     
                   <v-btn :color="btnColor" dark class="ma-2 mb-6 mr-2 ml-4 elevation-5" @click.native="openFileDialog">
-                    <v-icon dark>mdi-file-upload</v-icon> {{ title.uploadJson }}
+                    <v-icon dark>mdi-file-upload</v-icon> {{ text.uploadJson }}
                   </v-btn>
                   <form id="jsonfile">
-                    <input type="file" name="fileimport" id="file-upload" style="display:none"  @change="onFileChange">
+                    <input type="file" name="fileimport" id="file-upload" style="display:none" multiple @change="onFileChange">
                   </form>
 
-                  <v-alert dense text class="elevation-5"
+                  <v-alert dense text class="elevation-1"
                     transition="scale-transition"                   
                     :type="alertType" 
                     :value="alert"                    
@@ -89,22 +85,35 @@
                 <!-- Formular-Felder -->
                 <v-card>
                   <v-card-title>
-                    <span class="headline">{{ formTitle }} {{ editedItem.id ? editedItem.id : '' }}</span>
+                    <span class="headline" v-show="showFields"><!-- Neu / Edit -->
+                      <v-icon v-if="editedItem.id">mdi-account-edit</v-icon>
+                      <v-icon v-if="!editedItem.id">mdi-account-plus</v-icon>
+                      {{ formTitle }} {{ editedItem.id ? editedItem.id : '' }}
+                    </span>
+                    <span class="headline" v-show="!showFields"> <!-- Löschen -->
+                        <v-icon v-if="editedItem.id">mdi-account-remove</v-icon>              
+                        {{ formTitle }} {{ editedItem.id ? editedItem.id : '' }}
+                    </span>
                   </v-card-title>
                   <v-form ref="form" v-model="valid" lazy-validation>
                     <v-card-text>
-                      <v-container>
+
+                      <v-container v-show="!showFields" class="title">
+                       
+                        {{ text.delQuestion }}
+                      </v-container>
+
+                      <v-container v-show="showFields">
                         <v-row>
                           <v-col cols="12" sm="6">
                             <v-text-field 
                               required
-                              v-model="editedItem.firstname" 
+                              v-model="editedItem.firstname"
                               :label="headers.find(i => i.value === 'firstname').text + '*'"
                               :maxlength="headers.find(i => i.value === 'firstname').max"
                               :counter="headers.find(i => i.value === 'firstname').max"
-                              :rules="nameRules"
-                              validate-on-blur
-                              :hint="msg.counter"></v-text-field>
+                              :rules="nameRules"                              
+                              :hint="text.counter"></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6">
                             <v-text-field 
@@ -113,43 +122,8 @@
                               :label="headers.find(i => i.value === 'lastname').text + '*'"
                               :maxlength="headers.find(i => i.value === 'lastname').max"
                               :counter="headers.find(i => i.value === 'lastname').max"
-                              :rules="nameRules"
-                              validate-on-blur                       
-                              :hint="msg.counter"></v-text-field>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="12" sm="12">
-                            <v-text-field 
-                              v-model="editedItem.street" 
-                              :label="headers.find(i => i.value === 'street').text"
-                              :maxlength="headers.find(i => i.value === 'street').max"
-                              :counter="headers.find(i => i.value === 'street').max"
-                              :hint="msg.counter">
-                            </v-text-field>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="12" sm="4">
-                            <v-text-field 
-                              v-model="editedItem.postcode" 
-                              :label="headers.find(i => i.value === 'postcode').text"
-                              :maxlength="headers.find(i => i.value === 'postcode').max"
-                              :size="headers.find(i => i.value === 'postcode').max"
-                              pattern="[0-9]{5}"
-                              :counter="headers.find(i => i.value === 'postcode').max"
-                              :rules="zipRules"
-                              validate-on-blur
-                              :hint="msg.counter"></v-text-field>
-                          </v-col>
-                          <v-col cols="12" sm="8">
-                            <v-text-field 
-                              v-model="editedItem.place" 
-                              :label="headers.find(i => i.value === 'place').text"
-                              :maxlength="headers.find(i => i.value === 'place').max"
-                              :counter="headers.find(i => i.value === 'place').max"
-                              :hint="msg.counter">
-                            </v-text-field>
+                              :rules="nameRules"                                                   
+                              :hint="text.counter"></v-text-field>
                           </v-col>
                         </v-row>
                         <v-row>
@@ -160,9 +134,40 @@
                               :label="headers.find(i => i.value === 'email').text + '*'"
                               :maxlength="headers.find(i => i.value === 'email').max" 
                               :counter="headers.find(i => i.value === 'email').max"
-                              :rules="emailRules"
-                              validate-on-blur
-                              :hint="msg.counter">
+                              :rules="emailRules"                              
+                              :hint="text.counter">
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="12">
+                            <v-text-field 
+                              v-model="editedItem.street" 
+                              v-show="showFields"
+                              :label="headers.find(i => i.value === 'street').text"
+                              :maxlength="headers.find(i => i.value === 'street').max"
+                              :counter="headers.find(i => i.value === 'street').max"
+                              :hint="text.counter">
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="4">
+                            <v-text-field 
+                              v-model="editedItem.postcode" 
+                              :label="headers.find(i => i.value === 'postcode').text"
+                              :maxlength="headers.find(i => i.value === 'postcode').max"                              
+                              :counter="headers.find(i => i.value === 'postcode').max"
+                              :rules="zipRules"
+                              :hint="text.counter"></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="8">
+                            <v-text-field 
+                              v-model="editedItem.place" 
+                              :label="headers.find(i => i.value === 'place').text"
+                              :maxlength="headers.find(i => i.value === 'place').max"
+                              :counter="headers.find(i => i.value === 'place').max"
+                              :hint="text.counter">
                             </v-text-field>
                           </v-col>
                         </v-row>
@@ -173,7 +178,7 @@
                               :label="headers.find(i => i.value === 'fon').text"
                               :maxlength="headers.find(i => i.value === 'fon').max"
                               :counter="headers.find(i => i.value === 'fon').max"
-                              :hint="msg.counter"></v-text-field>
+                              :hint="text.counter"></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6">
                             <v-text-field 
@@ -181,10 +186,10 @@
                               :label="headers.find(i => i.value === 'mobil').text"
                               :maxlength="headers.find(i => i.value === 'mobil').max"
                               :counter="headers.find(i => i.value === 'mobil').max"
-                              :hint="msg.counter"></v-text-field>
+                              :hint="text.counter"></v-text-field>
                           </v-col>
                         </v-row>
-                        <small color="red">{{ requiredField }}</small>
+                        <small color="red">* {{ text.requiredField }}</small>
                       </v-container>                    
                     </v-card-text>
 
@@ -196,15 +201,24 @@
                         dark text 
                         class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
                         @click="close">
-                          <v-icon dark>mdi-close-circle</v-icon> {{ title.cancel }}
+                          <v-icon dark>mdi-close-circle</v-icon> {{ text.cancel }}
                       </v-btn>
-                      <v-btn 
+                      <v-btn
+                        v-show="showFields"
                         :disabled="!valid"
                         :color="btnColor" 
                         text
                         class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
                         @click="save">
-                          <v-icon dark>mdi-content-save-edit</v-icon> {{ title.saveRec }}
+                          <v-icon dark>mdi-content-save-edit</v-icon> {{ text.saveRec }}
+                      </v-btn>
+                      <v-btn
+                        v-show="!showFields"
+                        :color="btnColor" 
+                        text
+                        class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
+                        @click="remove">
+                          <v-icon dark>mdi-delete</v-icon> {{ text.delRec }}
                       </v-btn>
                     </v-card-actions>
                   </v-form>
@@ -220,7 +234,7 @@
           </template>
 
           <template v-slot:no-data>
-            <v-btn :color="btnColor" dark class="ma-2" @click="initialize">{{ title.resetBtn }}</v-btn>
+            <v-btn :color="btnColor" dark class="ma-2" @click="initialize">{{ text.resetBtn }}</v-btn>
           </template>
 
           <!-- Test mit email adresse -->

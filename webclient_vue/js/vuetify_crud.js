@@ -3,8 +3,46 @@
 // https://vuetifyjs.com/en/components/data-tables#examples
 
 document.addEventListener('DOMContentLoaded', () => {
+  /** suchfeld leeren button
+   *  emait to function
+   *  geburtsdatum einbauen mit Datumsfeld
+   *  Doku, ggf labeltexte in DB
+   *  Bibliotheken runterladen
+   */
+
   let log = console.log;
   const httpHeader = { 'content-type': 'application/json' };
+  const lableText = {
+    add: 'Kontakt anlegen:',
+    edit: 'Kontakt editieren: ID#',
+    topic: 'Übersicht',
+    table: 'Kontakte',
+    saveRec: 'Speichern',
+    cancel: 'Abbrechen',
+    newRec: 'Hinzufügen',
+    uploadJson: 'Importieren',
+    resetBtn: 'Daten laden',
+    searchItem: 'Tabelle filtern',
+    requiredField: 'Pflichtfeld',
+    counter: 'eingefügte Zeichen',
+    del: 'Kontakt löschen: ID#',
+    delRec: 'Löschen',
+    delQuestion: 'Wollen Sie den Kontakt wirklich löschen?',
+    nameRuleLabel: 'Min 3 Zeichen',
+    emailRuleLabel: 'E-mail muss gültig sein',
+    zipRuleLabel: 'PLZ muss 5-stellige Zahl sein'
+  }
+  const contactObj = {
+    id: '',
+    firstname: '',
+    lastname: '',
+    street: '',
+    postcode: '',
+    place: '',
+    email: '',
+    fon: '',
+    mobil: '',
+  }
 
   new Vue({
     el: '#app',
@@ -12,11 +50,14 @@ document.addEventListener('DOMContentLoaded', () => {
     data: () => ({
       url: '/api/contacts',
       dialog: false,
+      showFields: true,
       search: '',
+      rowsPerPage: 5,
       alert: false,
       alertMsg: '',
       alertType: 'success',
       alertTimeouts: [],
+      btnColor: 'rgba(78,95,187,0.8)',
       headers: [
         { text: 'ID', value: 'id', align: 'left', sortable: true },
         { text: 'Vorname', value: 'firstname', sortable: true, max: '30' },
@@ -31,75 +72,41 @@ document.addEventListener('DOMContentLoaded', () => {
       ],
       contacts: [],
       editedIndex: -1,
-      editedItem: {
-        id: '',
-        firstname: '',
-        lastname: '',
-        street: '',
-        postcode: '',
-        place: '',
-        email: '',
-        fon: '',
-        mobil: '',
-      },
-      defaultItem: {
-        id: '',
-        firstname: '',
-        lastname: '',
-        street: '',
-        postcode: '',
-        place: '',
-        email: '',
-        fon: '',
-        mobil: '',
-      },
+      editedItem: { ...contactObj },
+      defaultItem: { ...contactObj },
+
       valid: true,
       nameRules: [
-        v => !!v || 'Pflichtfeld',
-        v => (v && v.length >= 3) || 'Min 3 Zeichen'
+        v => !!v || lableText.requiredField,
+        v => (v && v.length >= 3) || lableText.nameRuleLabel
       ],
       emailRules: [
-        v => !!v || 'Pflichtfeld',
-        v => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail muss gültig sein'
+        v => !!v || lableText.requiredField,
+        v => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || lableText.emailRuleLabel
       ],
       zipRules: [
-        v => (v && /^[0-9]{5}$/) || 'PLZ muss 5-stellig sein',
-        v => (v && v.length <= 5) || 'Max 5 Zeichen',
-      ],
-      title: {
-        add: 'Kontakt anlegen:',
-        edit: 'Kontakt editieren: ID#',
-        topic: 'Übersicht',
-        table: 'Kontakte',
-        saveRec: 'Speichern',
-        cancel: 'Abbrechen',
-        newRec: 'Hinzufügen',
-        uploadJson: 'Importieren',
-        resetBtn: 'Daten laden',
-        searchItem: 'Tabelle filtern',
-        requiredField: '* Pflichtfelder',
-      },
-      msg: {
-        counter: 'eingefügte Zeichen',
-        del: ' - Sollen die Daten gelöscht werden ?'
-      },
-      btnColor: 'rgba(78,95,187,0.8)',
+        v => !v || /^[0-9]{5}?$/.test(v) || lableText.zipRuleLabel
+      ],      
+      text: {...lableText}
     }),
 
     computed: {
       formTitle() {
-        return this.editedIndex === -1 ? this.title.add : this.title.edit
+        if (this.showFields) 
+          return this.editedIndex === -1 ? this.text.add : this.text.edit;
+        else return this.text.del;
       },
     },
 
     watch: {
       dialog(val) {
-        val || this.close()
+        this.valid = true;
+        val || this.close();
       },
     },
 
     created() {
-      this.initialize()
+      this.initialize();
     },
 
     methods: {
@@ -109,13 +116,108 @@ document.addEventListener('DOMContentLoaded', () => {
           .then(result => this.contacts = result)
           .catch(console.log)
       },
-      // Beispiel zum ändern von css
-      getColor(email) {
-        if (email) return 'rgba(78,95,187,0.8)';
-        //else if (calories > 200) return 'orange'
-        //else return 'green'
-        return 'indigo';
+
+
+      openFileDialog() {
+        document.getElementById('file-upload').click();
       },
+      onFileChange(e) {
+        let formular = document.querySelector('#jsonfile');
+        fetch(new Request('/api/uploadFile', {
+          method: 'post',
+          body: new FormData(formular)
+        }))
+          .then(res => res.text())
+          .then(data => {
+            setTimeout(() => {
+              this.initialize();
+              this.toggleAlert(data);
+            }, 400);
+          })
+          .catch(err => log(err));
+      },
+
+
+      close() {
+        this.showFields = true;
+        this.valid = true;
+        this.dialog = false;        
+        this.$refs.form.reset();
+        this.$refs.form.resetValidation();        
+        setTimeout(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        }, 300)
+      },
+
+
+      editItem(item) {
+        this.editedIndex = this.contacts.indexOf(item);
+        this.editedItem = Object.assign({}, item);
+        this.dialog = true;
+      },
+
+
+      deleteItem(item) {
+        log('delID: ', item.id);
+        this.editItem(item);
+        this.showFields = false;
+      },
+
+
+      remove(){
+        log('delId: ', this.editedItem.id)
+        this.connectionToApi({
+          apiUrl: `${this.url}/${this.editedItem.id}`,
+          method: 'delete'
+        });        
+        this.close();
+      },
+
+
+      save() {
+        if (this.$refs.form.validate()) {
+          if (this.editedIndex > -1) {
+            log('editId: ', this.editedItem.id)
+            let editContact = JSON.stringify(this.editedItem);
+            this.connectionToApi({
+              apiUrl: `${this.url}/${this.editedItem.id}`,
+              method: 'put',
+              body: editContact
+            })
+          }
+          else {
+            delete this.editedItem['id'];
+            // editItem must be stringify before otherwise no data 
+            let newContact = JSON.stringify(this.editedItem);
+            log('newContact: ', newContact);
+            this.connectionToApi({ method: 'post', body: newContact })
+          }
+          this.close();
+        }
+      },
+
+
+      connectionToApi({
+        apiUrl = this.url,
+        method = 'get',
+        headers = httpHeader,
+        body = ''
+      } = {}) {
+        return fetch(new Request(apiUrl, {
+          method: method,
+          headers: headers,
+          body: body ? body : ''
+        }))
+          .then(resp => resp.text())
+          .then(data => {
+            log(data);
+            this.initialize();
+            this.toggleAlert(data)
+          })
+          .catch(err => log(err));
+      },
+
 
       toggleAlert(msg) {
         const delTimeouts = () => {
@@ -135,94 +237,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!msg && !this.alert) delTimeouts();
       },
 
-      editItem(item) {
-        this.editedIndex = this.contacts.indexOf(item);
-        this.editedItem = Object.assign({}, item);
-        this.dialog = true;
-      },
 
-      deleteItem(item) {
-        log('delID: ', item.id);
-        if (confirm(`ID: ${item.id} ${this.msg.del}`)) {
-          fetch(new Request(`${this.url}/${item.id}`, {
-            method: 'delete'
-          }))
-            .then(res => res.text())
-            .then(data => {
-              this.initialize();
-              this.toggleAlert(data);
-            })
-            .catch(err => log('err', err));
-        }
-      },
-
-      close() {
-        this.dialog = false;
-        this.valid = true;
-        this.$refs.form.reset();
-        this.$refs.form.resetValidation();
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      },
-
-      openFileDialog() {
-        document.getElementById('file-upload').click();
-      },
-
-      onFileChange(e) {
-        let formular = document.querySelector('#jsonfile');
-        fetch(new Request('/api/uploadFile', {
-          method: 'post',
-          body: new FormData(formular)
-        }))
-          .then(res => res.text())
-          .then(data => {
-            setTimeout(() => {
-              this.initialize();
-              this.toggleAlert(data);
-            }, 400);
-          })
-          .catch(err => log(err));
-      },
-
-      save() {
-        if (this.$refs.form.validate()) {
-          if (this.editedIndex > -1) {
-            log('editID: ', this.editedItem.id)
-            fetch(new Request(`${this.url}/${this.editedItem.id}`, {
-              method: 'put',
-              headers: httpHeader,
-              body: JSON.stringify(this.editedItem)
-            }))
-              .then(resp => resp.text())
-              .then(data => {
-                setTimeout(() => {
-                  this.initialize();
-                  this.toggleAlert(data);
-                }, 400);
-              })
-              .catch(err => log(err));
-          }
-          else {
-            log('newObj: ', this.editedItem);
-            delete this.editedItem['id'];
-            fetch(new Request(this.url, {
-              method: 'post',
-              headers: httpHeader,
-              body: JSON.stringify(this.editedItem)
-            }))
-              .then(resp => resp.text())
-              .then(data => {
-                this.initialize();
-                this.toggleAlert(data);
-              })
-              .catch(err => log(err));
-          }
-          this.close();
-        }
-      },
+      // Beispiel zum ändern von css
+      getColor(email) {
+        if (email) return 'rgba(78,95,187,0.8)';
+        //else if (calories > 200) return 'orange'
+        //else return 'green'
+        return 'indigo';
+      }
     },
   })
 })

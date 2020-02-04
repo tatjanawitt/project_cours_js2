@@ -1,0 +1,9 @@
+.v-application--wrap {
+    background-image: url("../img/partypeople.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+  }
+  .theme--light.v-card {
+    background: rgb(250,235,215);
+    background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(250,235,215,1) 100%);
+  }
