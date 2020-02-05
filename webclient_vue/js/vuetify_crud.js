@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
     table: 'Kontakte',
     saveRec: 'Speichern',
     cancel: 'Abbrechen',
-    newRec: 'Hinzufügen',
-    uploadJson: 'Importieren',
+    newRec: 'Neu',
+    uploadJson: 'Import',
     resetBtn: 'Daten laden',
     searchItem: 'Kontakte filtern',
     requiredField: 'Pflichtfeld',
@@ -30,17 +30,23 @@ document.addEventListener('DOMContentLoaded', () => {
     emailRuleLabel: 'E-mail muss gültig sein',
     zipRuleLabel: 'Min 5 Zahlen'
   }
-  const contactObj = {
-    id: '',
-    firstname: '',
-    lastname: '',
-    street: '',
-    postcode: '',
-    place: '',
-    email: '',
-    fon: '',
-    mobil: '',
-    born: null,
+  const tableHeader = [ // align: ' d-none' to hide col (blank befor must be)
+    { text: '# Id', value: 'id', align: 'left', sortable: true },
+    { text: 'Vorname', value: 'firstname', sortable: true, max: '30' },
+    { text: 'Nachname', value: 'lastname', sortable: true, max: '30' },
+    { text: 'Email', value: 'email', sortable: true, max: '50' },
+    { text: 'Strasse', value: 'street', sortable: false, max: '50', align: ' d-none' },
+    { text: 'Postleitzahl', value: 'postcode', sortable: false, max: '5', align: ' d-none' },
+    { text: 'Ort', value: 'place', sortable: true, max: '50' },
+    { text: 'Telefon', value: 'fon', sortable: false, max: '30' },
+    { text: 'Mobil', value: 'mobil', sortable: false, max: '30' },
+    { text: 'Geburtsdatum', value: 'born', align: ' d-none' },
+    { text: 'Actions', value: 'action', sortable: false },
+  ]
+  const setObj = cols => {
+    let obj = {};
+    for(let col of cols) obj[col.value] = '';
+    return obj;
   }
 
   new Vue({
@@ -50,8 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
       url: '/api/contacts',
       dialog: false,
       dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
+      menu: false, // datepiker menu
       isBirthdayMsgDisplayed: false,
-      menu: false,
       showFields: true,
       search: '',
       rowsPerPage: 5,
@@ -60,22 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
       alertType: 'success',
       alertTimeouts: [],
       btnColor: 'rgba(78,95,187,0.8)',
-      headers: [ // align: ' d-none' to hide col (blank befor must be)
-        { text: '# Id', value: 'id', align: 'left', sortable: true },
-        { text: 'Vorname', value: 'firstname', sortable: true, max: '30' },
-        { text: 'Nachname', value: 'lastname', sortable: true, max: '30' },
-        { text: 'Email', value: 'email', sortable: true, max: '50' },
-        { text: 'Strasse', value: 'street', sortable: false, max: '50', align: ' d-none' },
-        { text: 'Postleitzahl', value: 'postcode', sortable: false, max: '5', align: ' d-none' },
-        { text: 'Ort', value: 'place', sortable: true, max: '50' },
-        { text: 'Telefon', value: 'fon', sortable: false, max: '30' },
-        { text: 'Mobil', value: 'mobil', sortable: false, max: '30' },
-        { text: 'Geburtsdatum', value: 'born', align: ' d-none' },
-        { text: 'Actions', value: 'action', sortable: false },
-      ],
+      headers: [ ...tableHeader ],
       contacts: [],
       editedIndex: -1,
-      editedItem: { ...contactObj },
+      editedItem: { ...setObj(tableHeader) },
       text: { ...lableText },
       valid: true,
       nameRules: [
@@ -99,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       computedDateFormatted: { // vm need getter and setter otherwise warn
         get: function () { return this.formatDate(this.editedItem.born); },
-        set: function (val) { return this.editedItem.born; } // prevent warn
+        set: function (val) { return this.editedItem.born; }
       },
     },
 
@@ -230,7 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
         this.close();
       },
 
-
       save() {
         if (this.$refs.form.validate()) {
           if (this.editedIndex > -1) {
@@ -253,8 +246,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       },
 
-
-      /* ---- FETCH TO BACKEND FUNCTIONS --------*/
       connectionToApi({
         apiUrl = this.url,
         method = 'get',
