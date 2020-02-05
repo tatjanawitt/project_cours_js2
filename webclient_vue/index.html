@@ -55,8 +55,7 @@
           <template v-slot:top>
             <v-toolbar short>
               <v-toolbar-title>
-                <v-icon>mdi-account-multiple-outline</v-icon>
-                {{ text.topic }}
+                <v-icon>mdi-account-multiple-outline</v-icon> {{ text.topic }}
               </v-toolbar-title>
               <v-divider class="mx-4" inset vertical></v-divider>
               <v-spacer></v-spacer>
@@ -86,12 +85,12 @@
                 <!-- Formular-Felder -->
                 <v-card>
                   <v-card-title>
-                    <span class="headline" v-show="showFields"><!-- Neu / Edit -->
+                    <span class="headline" v-show="showFields"><!-- New / Edit Header Dialog -->
                       <v-icon v-if="editedItem.id">mdi-account-edit</v-icon>
                       <v-icon v-if="!editedItem.id">mdi-account-plus</v-icon>
                       {{ formTitle }} {{ editedItem.id ? editedItem.id : '' }}
                     </span>
-                    <span class="headline" v-show="!showFields"> <!-- Löschen -->
+                    <span class="headline" v-show="!showFields"> <!-- Delete Header Dialog -->
                         <v-icon v-if="editedItem.id">mdi-account-remove</v-icon>              
                         {{ formTitle }} {{ editedItem.id ? editedItem.id : '' }}
                     </span>
@@ -129,7 +128,7 @@
                           </v-col>
                         </v-row>
                         <v-row>
-                          <v-col cols="12" sm="12">
+                          <v-col cols="12" sm="7">
                             <v-text-field 
                               required
                               clearable
@@ -140,6 +139,27 @@
                               :rules="emailRules"                              
                               :hint="text.counter">
                             </v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="5">
+                            <v-menu
+                              v-model="menu"
+                              :close-on-content-click="false"
+                              transition="scale-transition"
+                              offset-y max-width="290px" min-width="290px">
+                              <template v-slot:activator="{ on }">
+                                <v-text-field
+                                  v-model="computedDateFormatted"
+                                  :label="headers.find(i => i.value === 'born').text"
+                                  append-icon="event"
+                                  readonly v-on="on"
+                                ></v-text-field>
+                              </template>
+                              <v-date-picker 
+                                v-model="editedItem.born" 
+                                no-title 
+                                @input="menu = false"
+                              ></v-date-picker>
+                            </v-menu>
                           </v-col>
                         </v-row>
                         <v-row>
@@ -235,7 +255,7 @@
             </v-toolbar>
           </template>
 
-          <!-- Sots für Tabelle (Edit, Delete, etc.) -->
+          <!-- Slots für Tabelle (Edit, Delete, Email, Birthday, etc.) -->
           <template v-slot:item.action="{ item }">
             <v-icon :color="btnColor" class="mr-3" @click="editItem(item)">mdi-account-edit</v-icon>
             <v-icon :color="btnColor" @click="deleteItem(item)">delete</v-icon>
@@ -246,11 +266,14 @@
           </template>
 
           <template v-slot:item.email="{ item }">
-            <v-chip v-if="item.email"
-              class="ma-2" outlined label :color="btnColor" 
+            <v-chip v-if="item.email" class="ma-2" outlined label :color="btnColor" 
               :href="getEmailLink(item.email)">
               <v-icon left>mdi-email</v-icon>{{ item.email }}              
             </v-chip>
+          </template>
+
+          <template v-slot:item.id="{ item }">{{ item.id }}         
+            <v-icon :color="btnColor" v-if="checkBirthdate(item.born, '-')">mdi-cake-variant</v-icon>
           </template>
 
         </v-data-table>

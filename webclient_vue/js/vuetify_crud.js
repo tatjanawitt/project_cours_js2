@@ -1,13 +1,11 @@
 'use strict';
-// https://vuetifyjs.com/en/components/data-tables
-// https://vuetifyjs.com/en/components/data-tables#examples
 
 document.addEventListener('DOMContentLoaded', () => {
-  /** suchfeld leeren button
-   *  emait to function
-   *  geburtsdatum einbauen mit Datumsfeld
+  /** 
    *  Doku, ggf labeltexte in DB
    *  Bibliotheken runterladen
+   * https://vuejsdevelopers.com/2018/08/27/vue-js-form-handling-vuelidate/
+   * Tabellenspalten selber wählen
    */
 
   let log = console.log;
@@ -42,14 +40,18 @@ document.addEventListener('DOMContentLoaded', () => {
     email: '',
     fon: '',
     mobil: '',
+    born: null,
   }
 
   new Vue({
     el: '#app',
     vuetify: new Vuetify(),
-    data: () => ({
+    data: vm => ({
       url: '/api/contacts',
       dialog: false,
+      dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
+      isBirthdayMsgDisplayed: false,
+      menu: false,
       showFields: true,
       search: '',
       rowsPerPage: 5,
@@ -58,23 +60,23 @@ document.addEventListener('DOMContentLoaded', () => {
       alertType: 'success',
       alertTimeouts: [],
       btnColor: 'rgba(78,95,187,0.8)',
-      headers: [
+      headers: [ // align: ' d-none' to hide col (blank befor must be)
         { text: '# Id', value: 'id', align: 'left', sortable: true },
         { text: 'Vorname', value: 'firstname', sortable: true, max: '30' },
         { text: 'Nachname', value: 'lastname', sortable: true, max: '30' },
         { text: 'Email', value: 'email', sortable: true, max: '50' },
-        { text: 'Strasse', value: 'street', sortable: false, max: '50' },
-        { text: 'Postleitzahl', value: 'postcode', sortable: false, max: '5' },
-        { text: 'Ort', value: 'place', sortable: true, max: '50' },        
+        { text: 'Strasse', value: 'street', sortable: false, max: '50', align: ' d-none' },
+        { text: 'Postleitzahl', value: 'postcode', sortable: false, max: '5', align: ' d-none' },
+        { text: 'Ort', value: 'place', sortable: true, max: '50' },
         { text: 'Telefon', value: 'fon', sortable: false, max: '30' },
         { text: 'Mobil', value: 'mobil', sortable: false, max: '30' },
+        { text: 'Geburtsdatum', value: 'born', align: ' d-none' },
         { text: 'Actions', value: 'action', sortable: false },
       ],
       contacts: [],
       editedIndex: -1,
       editedItem: { ...contactObj },
-      defaultItem: { ...contactObj },
-
+      text: { ...lableText },
       valid: true,
       nameRules: [
         v => !!v || lableText.requiredField,
@@ -86,15 +88,18 @@ document.addEventListener('DOMContentLoaded', () => {
       ],
       zipRules: [
         v => !v || /^[0-9]{5}?$/.test(v) || lableText.zipRuleLabel
-      ],      
-      text: {...lableText}
+      ],
     }),
 
     computed: {
       formTitle() {
-        if (this.showFields) 
+        if (this.showFields)
           return this.editedIndex === -1 ? this.text.add : this.text.edit;
         else return this.text.del;
+      },
+      computedDateFormatted: { // vm need getter and setter otherwise warn
+        get: function () { return this.formatDate(this.editedItem.born); },
+        set: function (val) { return this.editedItem.born; } // prevent warn
       },
     },
 
@@ -103,8 +108,12 @@ document.addEventListener('DOMContentLoaded', () => {
         this.valid = true;
         val || this.close();
       },
+      date(val) {
+        this.dateFormatted = this.formatDate(this.editedItem.born)
+      },
     },
 
+    /* ---- INIT FUNCTION --------*/
     created() {
       this.initialize();
     },
@@ -113,14 +122,61 @@ document.addEventListener('DOMContentLoaded', () => {
       initialize() {
         fetch(this.url)
           .then(result => result.json())
-          .then(result => this.contacts = result)
+          .then(result => {
+            this.contacts = result;
+            this.haveBirthday(result);
+          })
           .catch(console.log)
       },
 
 
+      /* ---- BIRTHDAY FUNCTIONS --------*/
+      haveBirthday(list) {
+        let birthday = [];
+        if (this.isBirthdayMsgDisplayed) return;
+        for (let item of list) {
+          if (!item.born) continue;
+          if (this.checkBirthdate(item.born, '-'))
+            birthday.push(`${item.firstname} ${item.lastname} wird heute ${this.getAge(item.born)}`);
+        }
+        this.isBirthdayMsgDisplayed = true; // display once by starting web
+        if (birthday.length) this.toggleAlert(birthday.join(', '), 'info');
+      },
+
+      checkBirthdate(dateYyyyMmDd, delimiter) {
+        if(!dateYyyyMmDd) return false;
+        const [year, month, day] = dateYyyyMmDd.split(delimiter);
+        let nowDay = new Date().getDate();
+        let nowMonth = new Date().getMonth() + 1;
+        return (day == nowDay && month == nowMonth);
+      },
+
+      getAge(date) {
+        let bornDate = new Date(date);
+        let ageDifMs = Date.now() - bornDate.getTime();
+        let ageDate = new Date(ageDifMs);
+        return Math.abs(ageDate.getUTCFullYear() - 1970);
+      },
+
+      /* ---- DATEPIKER FUNCTIONS --------*/
+      formatDate(date) {
+        if (!date) return null;
+        const [year, month, day] = date.split('-');
+        return `${day}.${month}.${year}`;
+      },
+
+      parseDate(date) {
+        if (!date) return null;
+        const [day, month, year] = date.split('.');
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+      },
+
+
+      /* ---- IMPORT JSON FUNCTIONS --------*/
       openFileDialog() {
         document.getElementById('file-upload').click();
       },
+
       onFileChange(e) {
         let formular = document.querySelector('#jsonfile');
         fetch(new Request('/api/uploadFile', {
@@ -138,25 +194,24 @@ document.addEventListener('DOMContentLoaded', () => {
       },
 
 
+      /* ---- MODAL DIALOG FUNCTIONS --------*/
       close() {
         this.showFields = true;
         this.valid = true;
-        this.dialog = false;        
+        this.dialog = false;
         this.$refs.form.reset();
-        this.$refs.form.resetValidation();        
+        this.$refs.form.resetValidation();
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
         }, 300)
       },
 
-
       editItem(item) {
         this.editedIndex = this.contacts.indexOf(item);
         this.editedItem = Object.assign({}, item);
         this.dialog = true;
       },
-
 
       deleteItem(item) {
         log('delID: ', item.id);
@@ -165,12 +220,13 @@ document.addEventListener('DOMContentLoaded', () => {
       },
 
 
-      remove(){
+      /* ---- MODAL DIALOG ACTION-FUNCTIONS --------*/
+      remove() {
         log('delId: ', this.editedItem.id)
         this.connectionToApi({
           apiUrl: `${this.url}/${this.editedItem.id}`,
           method: 'delete'
-        });        
+        });
         this.close();
       },
 
@@ -198,6 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
 
 
+      /* ---- FETCH TO BACKEND FUNCTIONS --------*/
       connectionToApi({
         apiUrl = this.url,
         method = 'get',
@@ -219,7 +276,8 @@ document.addEventListener('DOMContentLoaded', () => {
       },
 
 
-      toggleAlert(msg) {
+      /* ---- ALERT FUNCTIONS --------*/
+      toggleAlert(msg, typ = 'success') {
         const delTimeouts = () => {
           for (let i = 0; i < this.alertTimeouts.length; i++) {
             clearTimeout(this.alertTimeouts[i]);
@@ -229,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (this.alertTimeouts.length > 0) delTimeouts();
         msg ? this.alert = true : this.alert = false;
         msg ? this.alertMsg = msg : this.alertMsg = '';
-        msg.indexOf('error') != -1 ? this.alertType = 'error' : this.alertType = 'success';
+        msg.indexOf('error') != -1 ? this.alertType = 'error' : this.alertType = typ;
 
         this.alertTimeouts.push(setTimeout(() => {
           if (this.alert) this.alert = false;
@@ -237,6 +295,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!msg && !this.alert) delTimeouts();
       },
 
+
+      /* ---- MANIPULATE DATATABLE FUNCTIONS --------*/
       getEmailLink(email) {
         if (email) return 'mailto:' + email;
       }
