@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
    *  Bibliotheken runterladen
    * https://vuejsdevelopers.com/2018/08/27/vue-js-form-handling-vuelidate/
    * Tabellenspalten selber wählen
+   * https://stackoverflow.com/questions/58605679/how-to-show-hide-columns-of-vuetify-data-table-using-v-select-list
+   * https://codepen.io/chansv/pen/PooKMNb?editors=1010
    */
 
   let log = console.log;
@@ -30,17 +32,17 @@ document.addEventListener('DOMContentLoaded', () => {
     emailRuleLabel: 'E-mail muss gültig sein',
     zipRuleLabel: 'Min 5 Zahlen'
   }
-  const tableHeader = [ // align: ' d-none' to hide col (blank befor must be)
-    { text: '# Id', value: 'id', align: 'left', sortable: true },
-    { text: 'Vorname', value: 'firstname', sortable: true, max: '30' },
-    { text: 'Nachname', value: 'lastname', sortable: true, max: '30' },
-    { text: 'Email', value: 'email', sortable: true, max: '50' },
-    { text: 'Strasse', value: 'street', sortable: false, max: '50', align: ' d-none' },
-    { text: 'Postleitzahl', value: 'postcode', sortable: false, max: '5', align: ' d-none' },
-    { text: 'Ort', value: 'place', sortable: true, max: '50' },
-    { text: 'Telefon', value: 'fon', sortable: false, max: '30' },
-    { text: 'Mobil', value: 'mobil', sortable: false, max: '30' },
-    { text: 'Geburtsdatum', value: 'born', align: ' d-none' },
+  const tHead = [ // align: ' d-none' to hide col (blank befor must be)
+    { text: '# Id', value: 'id', align: 'left'},
+    { text: 'Vorname', value: 'firstname', max: '30' },
+    { text: 'Nachname', value: 'lastname', max: '30' },
+    { text: 'Email', value: 'email', max: '50' },
+    { text: 'Telefon', value: 'fon', max: '30' },
+    { text: 'Mobil', value: 'mobil', max: '30' },
+    { text: 'Strasse', value: 'street', max: '50' },
+    { text: 'Postleitzahl', value: 'postcode', max: '5' },
+    { text: 'Ort', value: 'place', max: '50' },
+    { text: 'Geburtsdatum', value: 'born', sortable: false,},
     { text: 'Actions', value: 'action', sortable: false },
   ]
   const setObj = cols => {
@@ -61,15 +63,17 @@ document.addEventListener('DOMContentLoaded', () => {
       showFields: true,
       search: '',
       rowsPerPage: 5,
+      value: [tHead[0],tHead[1],tHead[2],tHead[3],tHead[4],tHead[5],tHead[10]],
+      selectedHeaders: [tHead[0],tHead[1],tHead[2],tHead[3],tHead[4],tHead[5],tHead[10]],
       alert: false,
       alertMsg: '',
       alertType: 'success',
       alertTimeouts: [],
       btnColor: 'rgba(78,95,187,0.8)',
-      headers: [ ...tableHeader ],
+      headers: [ ...tHead ],
       contacts: [],
       editedIndex: -1,
-      editedItem: { ...setObj(tableHeader) },
+      editedItem: { ...setObj(tHead) },
       text: { ...lableText },
       valid: true,
       nameRules: [
@@ -105,6 +109,9 @@ document.addEventListener('DOMContentLoaded', () => {
       date(val) {
         this.dateFormatted = this.formatDate(this.editedItem.born)
       },
+      value(val) {
+        this.selectedHeaders = val;
+      }
     },
 
     /* ---- INIT FUNCTION --------*/

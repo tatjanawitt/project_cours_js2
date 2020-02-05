@@ -29,20 +29,44 @@
       <v-card class="mt-12 mx-auto" elevation="12">
         <v-card-title>
           <span class="headline">{{ text.table }}</span>
-          <v-spacer></v-spacer>
-          <v-text-field 
-            v-model="search" 
-            prepend-icon="mdi-account-search" 
-            :label="text.searchItem"
-            clearable
-            single-line
-            hide-details>
-          </v-text-field>
+          <v-container fluid>              
+            <v-row>
+              <v-col cols="12" sm="4">
+                <v-text-field 
+                  v-model="search" 
+                  prepend-icon="mdi-account-search" 
+                  :label="text.searchItem"
+                  clearable></v-text-field>
+              </v-col>
+              <v-spacer></v-spacer>
+              <v-col cols="12" sm="4">
+                <v-select 
+                  v-model="value" 
+                  :items="headers"
+                  prepend-icon="mdi-account-search" 
+                  multiple
+                  return-object
+                  label="Spalten auswählen" 
+                  clearable>
+                  <template v-slot:selection="{ item, index }">
+                    <v-chip v-if="index === 0">
+                      <span>{{ item.text }}</span>
+                    </v-chip>
+                    <span
+                      v-if="index === 1"
+                      class="grey--text caption"
+                    >(+{{ value.length - 1 }} others)</span>
+                  </template>
+                </v-select>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-card-title>
+        
 
         <!-- Tabelle -->
         <v-data-table   
-          :headers="headers" 
+          :headers="selectedHeaders" 
           :items="contacts" 
           :search="search" 
           :items-per-page="rowsPerPage" 
