@@ -4,6 +4,21 @@
     background-size: 100% 100%;
   }
   .theme--light.v-card {    
-    background: rgb(246,219,243);
-    background: linear-gradient(0deg, rgba(255,255,255,1) 30%, rgba(252,240,243,1) 100%);    
+    background: rgba(255,255,255,0.7);
   }
+  
+  .v-data-table-header, .v-data-footer { 
+    background-color: #f9f1db
+  }
+  div.v-dialog.v-dialog--active { 
+    background: #e0cd9f
+  }
+ 
+  tbody{
+    background-color: #f7f5ef
+  }
+  .v-toolbar__title,
+  .v-application .headline {
+    color: #e88700
+  }
+  

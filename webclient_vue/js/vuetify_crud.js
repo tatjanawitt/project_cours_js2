@@ -1,39 +1,16 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
-  /** 
-   *  Doku, ggf labeltexte in DB
-   *  Bibliotheken runterladen
-   * https://vuejsdevelopers.com/2018/08/27/vue-js-form-handling-vuelidate/
-   * Tabellenspalten selber wählen
-   * https://stackoverflow.com/questions/58605679/how-to-show-hide-columns-of-vuetify-data-table-using-v-select-list
-   * https://codepen.io/chansv/pen/PooKMNb?editors=1010
-   */
 
-  let log = console.log;
+  /**
+   * Constanten / Variablen
+  */
+  const log = console.log;
+  const mainColor = '#e88700'; //'#ef8f00';
+  const modalDialogWidth = '800px'
   const httpHeader = { 'content-type': 'application/json' };
-  const lableText = {
-    add: 'Kontakt anlegen:',
-    edit: 'Kontakt editieren: #',
-    topic: 'Übersicht',
-    table: 'Kontakte',
-    saveRec: 'Speichern',
-    cancel: 'Abbrechen',
-    newRec: 'Neu',
-    uploadJson: 'Import',
-    resetBtn: 'Daten laden',
-    searchItem: 'Kontakte filtern',
-    requiredField: 'Pflichtfeld',
-    counter: 'eingefügte Zeichen',
-    del: 'Kontakt löschen: #',
-    delRec: 'Löschen',
-    delQuestion: 'Wollen Sie den Kontakt wirklich löschen?',
-    nameRuleLabel: 'Min 3 Zeichen',
-    emailRuleLabel: 'E-mail muss gültig sein',
-    zipRuleLabel: 'Min 5 Zahlen'
-  }
-  const tHead = [ // align: ' d-none' to hide col (blank befor must be)
-    { text: '# Id', value: 'id', align: 'left'},
+  const tHead = [
+    { text: '# Id', value: 'id', align: 'left' },
     { text: 'Vorname', value: 'firstname', max: '30' },
     { text: 'Nachname', value: 'lastname', max: '30' },
     { text: 'Email', value: 'email', max: '50' },
@@ -42,40 +19,65 @@ document.addEventListener('DOMContentLoaded', () => {
     { text: 'Strasse', value: 'street', max: '50' },
     { text: 'Postleitzahl', value: 'postcode', max: '5' },
     { text: 'Ort', value: 'place', max: '50' },
-    { text: 'Geburtsdatum', value: 'born', sortable: false,},
+    { text: 'Alter', value: 'born' },
     { text: 'Actions', value: 'action', sortable: false },
   ]
+  // init/reset default selected cols in table
+  const tHeadDefault = [ 
+    tHead.find(i => i.value === 'id'),
+    tHead.find(i => i.value === 'firstname'),
+    tHead.find(i => i.value === 'lastname'),
+    tHead.find(i => i.value === 'email'),
+    tHead.find(i => i.value === 'fon'),
+    tHead.find(i => i.value === 'mobil'),
+    tHead.find(i => i.value === 'action'),
+  ];
+  // init editedItems by header keys
   const setObj = cols => {
     let obj = {};
-    for(let col of cols) obj[col.value] = '';
+    for (let col of cols) obj[col.value] = '';
     return obj;
   }
+  
 
+  /**
+   * Vue Constructor
+  */
   new Vue({
     el: '#app',
-    vuetify: new Vuetify(),
+    vuetify: new Vuetify({
+      theme: {
+        themes: {
+          light: {  // change standard colors
+            primary: mainColor, secondary: mainColor, anchor: mainColor, accent: mainColor
+          }
+        }
+      }
+    }),
     data: vm => ({
       url: '/api/contacts',
       dialog: false,
+      widthDialog: modalDialogWidth,
       dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
       menu: false, // datepiker menu
       isBirthdayMsgDisplayed: false,
-      showFields: true,
+      showFields: true, // regulate dialog view upsert/delete
       search: '',
       rowsPerPage: 5,
-      value: [tHead[0],tHead[1],tHead[2],tHead[3],tHead[4],tHead[5],tHead[10]],
-      selectedHeaders: [tHead[0],tHead[1],tHead[2],tHead[3],tHead[4],tHead[5],tHead[10]],
+      value: [...tHeadDefault], // tHead selectable values
+      selectedHeaders: [...tHeadDefault],
       alert: false,
       alertMsg: '',
-      alertType: 'success',
+      alertType: lableText.alertSuccess,
       alertTimeouts: [],
-      btnColor: 'rgba(78,95,187,0.8)',
-      headers: [ ...tHead ],
+      btnColor: mainColor,
+      headers: [...tHead],
       contacts: [],
       editedIndex: -1,
       editedItem: { ...setObj(tHead) },
-      text: { ...lableText },
-      valid: true,
+      defaultItem: { ...setObj(tHead) },
+      text: { ...lableText },  //vuetify_crud_labels.js
+      valid: true, // form-rules
       nameRules: [
         v => !!v || lableText.requiredField,
         v => (v && v.length >= 3) || lableText.nameRuleLabel
@@ -91,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     computed: {
       formTitle() {
-        if (this.showFields)
+        if (this.showFields)  // dialog title upsert/del
           return this.editedIndex === -1 ? this.text.add : this.text.edit;
         else return this.text.del;
       },
@@ -103,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     watch: {
       dialog(val) {
-        this.valid = true;
         val || this.close();
       },
       date(val) {
@@ -111,6 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       value(val) {
         this.selectedHeaders = val;
+        if (this.selectedHeaders.length < 1) {
+          this.selectedHeaders = [...tHeadDefault]
+          this.value = [...tHeadDefault];
+        };
       }
     },
 
@@ -141,11 +146,11 @@ document.addEventListener('DOMContentLoaded', () => {
             birthday.push(`${item.firstname} ${item.lastname} wird heute ${this.getAge(item.born)}`);
         }
         this.isBirthdayMsgDisplayed = true; // display once by starting web
-        if (birthday.length) this.toggleAlert(birthday.join(', '), 'info');
+        if (birthday.length) this.toggleAlert(birthday.join(', '), this.text.alertInfo);
       },
 
       checkBirthdate(dateYyyyMmDd, delimiter) {
-        if(!dateYyyyMmDd) return false;
+        if (!dateYyyyMmDd) return false;
         const [year, month, day] = dateYyyyMmDd.split(delimiter);
         let nowDay = new Date().getDate();
         let nowMonth = new Date().getMonth() + 1;
@@ -198,10 +203,8 @@ document.addEventListener('DOMContentLoaded', () => {
       /* ---- MODAL DIALOG FUNCTIONS --------*/
       close() {
         this.showFields = true;
-        this.valid = true;
+        this.widthDialog = 800;
         this.dialog = false;
-        this.$refs.form.reset();
-        this.$refs.form.resetValidation();
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
@@ -211,19 +214,27 @@ document.addEventListener('DOMContentLoaded', () => {
       editItem(item) {
         this.editedIndex = this.contacts.indexOf(item);
         this.editedItem = Object.assign({}, item);
+        this.showFields ? this.widthDialog = modalDialogWidth : this.widthDialog = '500px';
         this.dialog = true;
       },
 
       deleteItem(item) {
-        log('delID: ', item.id);
-        this.editItem(item);
         this.showFields = false;
+        this.editItem(item);        
+      },
+
+      reset () {
+        this.$refs.form.reset();
+      },
+
+      resetValidation () {
+        this.$refs.form.resetValidation();
       },
 
 
       /* ---- MODAL DIALOG ACTION-FUNCTIONS --------*/
       remove() {
-        log('delId: ', this.editedItem.id)
+        //log('delId: ', this.editedItem.id)
         this.connectionToApi({
           apiUrl: `${this.url}/${this.editedItem.id}`,
           method: 'delete'
@@ -234,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
       save() {
         if (this.$refs.form.validate()) {
           if (this.editedIndex > -1) {
-            log('editId: ', this.editedItem.id)
+            //log('editId: ', this.editedItem.id)
             let editContact = JSON.stringify(this.editedItem);
             this.connectionToApi({
               apiUrl: `${this.url}/${this.editedItem.id}`,
@@ -246,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
             delete this.editedItem['id'];
             // editItem must be stringify before otherwise no data 
             let newContact = JSON.stringify(this.editedItem);
-            log('newContact: ', newContact);
+            //log('newContact: ', newContact);
             this.connectionToApi({ method: 'post', body: newContact })
           }
           this.close();
@@ -266,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }))
           .then(resp => resp.text())
           .then(data => {
-            log(data);
+            //log(data);
             this.initialize();
             this.toggleAlert(data)
           })

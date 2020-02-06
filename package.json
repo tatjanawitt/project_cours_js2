@@ -1,7 +1,7 @@
 {
-  "name": "testprojekt",
+  "name": "contact_api",
   "version": "0.1.0",
-  "description": "test",
+  "description": "CRUD API Contacts with json-file-upload and Vuetify Datatable Frontend",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,7 +11,6 @@
   "dependencies": {
     "express": "^4.17.1",
     "formidable": "^1.2.1",
-    "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "nano": "^8.1.0",
     "nocache": "^2.1.0"

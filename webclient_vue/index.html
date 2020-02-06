@@ -10,15 +10,16 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.8/dist/vuetify.min.css" rel="stylesheet">
+  <link href="./css/vuetify.min.css" rel="stylesheet">
   <link href="./css/style.css" rel="stylesheet">
 
   <style>
   </style>
 
-  <script src="https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js" defer></script>
+  <script src="./js/polyfill.min.js" defer></script>
+  <script src="./js/vue.js" defer></script>
+  <script src="./js/vuetify.js" defer></script>
+  <script src="./js/vuetify_crud_labels.js"></script>
   <script src="./js/vuetify_crud.js"></script>
 </head>
 
@@ -28,37 +29,35 @@
       <!-- Kopf und Suchfeld -->
       <v-card class="mt-12 mx-auto" elevation="12">
         <v-card-title>
-          <span class="headline">{{ text.table }}</span>
+          <span class="display-1">{{ text.table }}</span>
           <v-container fluid>              
             <v-row>
+              <v-col cols="12" sm="4">
+                <v-select 
+                  v-model="value" 
+                  :items="headers"
+                  prepend-icon="mdi-table-column-width" 
+                  multiple
+                  return-object
+                  :label="text.selectCols"
+                  :hint="text.clearHint"
+                  persistent-hint
+                  clearable>
+                  <template v-slot:selection="{ item, index }">
+                    <v-chip v-if="index === 0"><span>{{ item.text }}</span></v-chip>
+                    <span v-if="index === 1" class="grey--text caption">
+                      (+{{ value.length - 1 }} {{text.selectHint}})</span>
+                  </template>
+                </v-select>
+              </v-col>
+              <v-spacer></v-spacer>
               <v-col cols="12" sm="4">
                 <v-text-field 
                   v-model="search" 
                   prepend-icon="mdi-account-search" 
                   :label="text.searchItem"
                   clearable></v-text-field>
-              </v-col>
-              <v-spacer></v-spacer>
-              <v-col cols="12" sm="4">
-                <v-select 
-                  v-model="value" 
-                  :items="headers"
-                  prepend-icon="mdi-account-search" 
-                  multiple
-                  return-object
-                  label="Spalten auswählen" 
-                  clearable>
-                  <template v-slot:selection="{ item, index }">
-                    <v-chip v-if="index === 0">
-                      <span>{{ item.text }}</span>
-                    </v-chip>
-                    <span
-                      v-if="index === 1"
-                      class="grey--text caption"
-                    >(+{{ value.length - 1 }} others)</span>
-                  </template>
-                </v-select>
-              </v-col>
+              </v-col>              
             </v-row>
           </v-container>
         </v-card-title>
@@ -79,12 +78,12 @@
           <template v-slot:top>
             <v-toolbar short>
               <v-toolbar-title>
-                <v-icon>mdi-account-multiple-outline</v-icon> {{ text.topic }}
+                <v-icon :color="btnColor">mdi-account-multiple-outline</v-icon> {{ text.topic }}
               </v-toolbar-title>
               <v-divider class="mx-4" inset vertical></v-divider>
               <v-spacer></v-spacer>
 
-              <v-dialog v-model="dialog"  persistent max-width="500px">
+              <v-dialog v-model="dialog" persistent :width="widthDialog">
 
                 <template v-slot:activator="{ on }">                   
                   <v-btn :color="btnColor" dark class="ma-2 my-2 ml-2" v-on="on">
@@ -110,12 +109,12 @@
                 <v-card>
                   <v-card-title>
                     <span class="headline" v-show="showFields"><!-- New / Edit Header Dialog -->
-                      <v-icon v-if="editedItem.id">mdi-account-edit</v-icon>
-                      <v-icon v-if="!editedItem.id">mdi-account-plus</v-icon>
+                      <v-icon v-if="editedItem.id" :color="btnColor">mdi-account-edit</v-icon>
+                      <v-icon v-if="!editedItem.id" :color="btnColor">mdi-account-plus</v-icon>
                       {{ formTitle }} {{ editedItem.id ? editedItem.id : '' }}
                     </span>
                     <span class="headline" v-show="!showFields"> <!-- Delete Header Dialog -->
-                        <v-icon v-if="editedItem.id">mdi-account-remove</v-icon>              
+                        <v-icon v-if="editedItem.id" :color="btnColor">mdi-account-remove</v-icon>              
                         {{ formTitle }} {{ editedItem.id ? editedItem.id : '' }}
                     </span>
                   </v-card-title>
@@ -173,7 +172,7 @@
                               <template v-slot:activator="{ on }">
                                 <v-text-field
                                   v-model="computedDateFormatted"
-                                  :label="headers.find(i => i.value === 'born').text"
+                                  :label="text.born"
                                   append-icon="event"
                                   readonly v-on="on"
                                 ></v-text-field>
@@ -248,12 +247,21 @@
                     <!-- Formular-Buttons -->
                     <v-card-actions>
                       <v-spacer></v-spacer>
-                      <v-btn 
+                      <v-btn
+                        v-show="showFields"
                         :color="btnColor" 
                         dark text 
                         class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
-                        @click="close">
-                          <v-icon dark>mdi-close-circle</v-icon> {{ text.cancel }}
+                        @click="reset">
+                          <v-icon dark>mdi-close</v-icon> {{ text.reset }}
+                      </v-btn>
+                      <v-btn
+                        v-show="showFields"
+                        :color="btnColor" 
+                        dark text 
+                        class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
+                        @click="resetValidation">
+                          <v-icon dark>mdi-autorenew</v-icon> {{ text.valReset }}
                       </v-btn>
                       <v-btn
                         v-show="showFields"
@@ -271,6 +279,13 @@
                         class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
                         @click="remove">
                           <v-icon dark>mdi-delete</v-icon> {{ text.delRec }}
+                      </v-btn>
+                      <v-btn 
+                        :color="btnColor" 
+                        dark text 
+                        class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
+                        @click="close">
+                          <v-icon dark>mdi-close-circle</v-icon> {{ text.cancel }}
                       </v-btn>
                     </v-card-actions>
                   </v-form>
@@ -296,8 +311,12 @@
             </v-chip>
           </template>
 
-          <template v-slot:item.id="{ item }">{{ item.id }}         
+          <template v-slot:item.firstname="{ item }">{{ item.firstname }}         
             <v-icon :color="btnColor" v-if="checkBirthdate(item.born, '-')">mdi-cake-variant</v-icon>
+          </template>
+
+          <template v-slot:item.born="{ item }">
+            {{ item.born ? getAge(item.born) + text.age : '' }}         
           </template>
 
         </v-data-table>
