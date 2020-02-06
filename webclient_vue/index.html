@@ -247,7 +247,7 @@
                     <!-- Formular-Buttons -->
                     <v-card-actions>
                       <v-spacer></v-spacer>
-                      <v-btn
+                      <v-btn v-if="window.width > 700"
                         v-show="showFields"
                         :color="btnColor" 
                         dark text 
@@ -255,7 +255,7 @@
                         @click="reset">
                           <v-icon dark>mdi-close</v-icon> {{ text.reset }}
                       </v-btn>
-                      <v-btn
+                      <v-btn v-if="window.width > 700"
                         v-show="showFields"
                         :color="btnColor" 
                         dark text 

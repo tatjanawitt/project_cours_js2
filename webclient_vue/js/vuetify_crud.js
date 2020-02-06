@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { text: 'Actions', value: 'action', sortable: false },
   ]
   // init/reset default selected cols in table
-  const tHeadDefault = [ 
+  const tHeadDefault = [
     tHead.find(i => i.value === 'id'),
     tHead.find(i => i.value === 'firstname'),
     tHead.find(i => i.value === 'lastname'),
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let col of cols) obj[col.value] = '';
     return obj;
   }
-  
+
 
   /**
    * Vue Constructor
@@ -89,6 +89,10 @@ document.addEventListener('DOMContentLoaded', () => {
       zipRules: [
         v => !v || /^[0-9]{5}?$/.test(v) || lableText.zipRuleLabel
       ],
+      window: {
+        width: 0,
+        height: 0
+      }
     }),
 
     computed: {
@@ -121,10 +125,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* ---- INIT FUNCTION --------*/
     created() {
+      window.addEventListener('resize', this.handleResize)
+      this.handleResize();
       this.initialize();
+    },
+    destroyed() {
+      window.removeEventListener('resize', this.handleResize)
     },
 
     methods: {
+      handleResize() {
+        this.window.width = window.innerWidth;
+        this.window.height = window.innerHeight;
+      },
       initialize() {
         fetch(this.url)
           .then(result => result.json())
@@ -143,10 +156,12 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let item of list) {
           if (!item.born) continue;
           if (this.checkBirthdate(item.born, '-'))
-            birthday.push(`${item.firstname} ${item.lastname} wird heute ${this.getAge(item.born)}`);
+            birthday.push(`${item.firstname} ${item.lastname} (${this.getAge(item.born)})`);
         }
         this.isBirthdayMsgDisplayed = true; // display once by starting web
-        if (birthday.length) this.toggleAlert(birthday.join(', '), this.text.alertInfo);
+        if (birthday.length)
+          this.toggleAlert(`${birthday.join(' & ')} ${birthday.length > 1 ?
+              'haben' : 'hat'} Geburtstag`, this.text.alertInfo);
       },
 
       checkBirthdate(dateYyyyMmDd, delimiter) {
@@ -220,14 +235,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       deleteItem(item) {
         this.showFields = false;
-        this.editItem(item);        
+        this.editItem(item);
       },
 
-      reset () {
+      reset() {
         this.$refs.form.reset();
       },
 
-      resetValidation () {
+      resetValidation() {
         this.$refs.form.resetValidation();
       },
 
