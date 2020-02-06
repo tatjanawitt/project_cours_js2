@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   /**
-   * Constanten / Variablen
+   * Constanten 
   */
   const log = console.log;
   const mainColor = '#e88700'; //'#ef8f00';
@@ -45,14 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
   */
   new Vue({
     el: '#app',
-    vuetify: new Vuetify({
-      theme: {
-        themes: {
-          light: {  // change standard colors
-            primary: mainColor, secondary: mainColor, anchor: mainColor, accent: mainColor
-          }
-        }
-      }
+    vuetify: new Vuetify({ // change standard colors
+      theme: { themes: { light: { primary: mainColor, secondary: mainColor, anchor: mainColor, accent: mainColor } } }
     }),
     data: vm => ({
       url: '/api/contacts',
@@ -89,11 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
       zipRules: [
         v => !v || /^[0-9]{5}?$/.test(v) || lableText.zipRuleLabel
       ],
-      window: {
-        width: 0,
-        height: 0
-      }
+      window: { width: 0, height: 0 }
     }),
+
 
     computed: {
       formTitle() {
@@ -106,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         set: function (val) { return this.editedItem.born; }
       },
     },
+
 
     watch: {
       dialog(val) {
@@ -133,10 +126,14 @@ document.addEventListener('DOMContentLoaded', () => {
       window.removeEventListener('resize', this.handleResize)
     },
 
+
     methods: {
       handleResize() {
         this.window.width = window.innerWidth;
         this.window.height = window.innerHeight;
+      },
+      getEmailLink(email) {
+        if (email) return 'mailto:' + email;
       },
       initialize() {
         fetch(this.url)
@@ -161,9 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
         this.isBirthdayMsgDisplayed = true; // display once by starting web
         if (birthday.length)
           this.toggleAlert(`${birthday.join(' & ')} ${birthday.length > 1 ?
-              'haben' : 'hat'} Geburtstag`, this.text.alertInfo);
+            'haben' : 'hat'} Geburtstag`, this.text.alertInfo);
       },
-
       checkBirthdate(dateYyyyMmDd, delimiter) {
         if (!dateYyyyMmDd) return false;
         const [year, month, day] = dateYyyyMmDd.split(delimiter);
@@ -171,7 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let nowMonth = new Date().getMonth() + 1;
         return (day == nowDay && month == nowMonth);
       },
-
       getAge(date) {
         let bornDate = new Date(date);
         let ageDifMs = Date.now() - bornDate.getTime();
@@ -185,7 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const [year, month, day] = date.split('-');
         return `${day}.${month}.${year}`;
       },
-
       parseDate(date) {
         if (!date) return null;
         const [day, month, year] = date.split('.');
@@ -197,7 +191,6 @@ document.addEventListener('DOMContentLoaded', () => {
       openFileDialog() {
         document.getElementById('file-upload').click();
       },
-
       onFileChange(e) {
         let formular = document.querySelector('#jsonfile');
         fetch(new Request('/api/uploadFile', {
@@ -225,23 +218,19 @@ document.addEventListener('DOMContentLoaded', () => {
           this.editedIndex = -1
         }, 300)
       },
-
       editItem(item) {
         this.editedIndex = this.contacts.indexOf(item);
         this.editedItem = Object.assign({}, item);
         this.showFields ? this.widthDialog = modalDialogWidth : this.widthDialog = '500px';
         this.dialog = true;
       },
-
       deleteItem(item) {
         this.showFields = false;
         this.editItem(item);
       },
-
       reset() {
         this.$refs.form.reset();
       },
-
       resetValidation() {
         this.$refs.form.resetValidation();
       },
@@ -256,7 +245,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         this.close();
       },
-
       save() {
         if (this.$refs.form.validate()) {
           if (this.editedIndex > -1) {
@@ -278,7 +266,6 @@ document.addEventListener('DOMContentLoaded', () => {
           this.close();
         }
       },
-
       connectionToApi({
         apiUrl = this.url,
         method = 'get',
@@ -317,13 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (this.alert) this.alert = false;
         }, 1000 * 10));
         if (!msg && !this.alert) delTimeouts();
-      },
-
-
-      /* ---- MANIPULATE DATATABLE FUNCTIONS --------*/
-      getEmailLink(email) {
-        if (email) return 'mailto:' + email;
       }
-    },
+    }
   })
 })

@@ -13,12 +13,9 @@
   <link href="./css/vuetify.min.css" rel="stylesheet">
   <link href="./css/style.css" rel="stylesheet">
 
-  <style>
-  </style>
-
-  <script src="./js/polyfill.min.js" defer></script>
-  <script src="./js/vue.js" defer></script>
-  <script src="./js/vuetify.js" defer></script>
+  <script src="./js/polyfill.min.js"></script>
+  <script src="./js/vue.js"></script>
+  <script src="./js/vuetify.js"></script>
   <script src="./js/vuetify_crud_labels.js"></script>
   <script src="./js/vuetify_crud.js"></script>
 </head>
@@ -253,7 +250,7 @@
                         dark text 
                         class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
                         @click="reset">
-                          <v-icon dark>mdi-close</v-icon> {{ text.reset }}
+                        <v-icon dark>mdi-close</v-icon> {{ text.reset }}
                       </v-btn>
                       <v-btn v-if="window.width > 700"
                         v-show="showFields"
@@ -261,7 +258,7 @@
                         dark text 
                         class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
                         @click="resetValidation">
-                          <v-icon dark>mdi-autorenew</v-icon> {{ text.valReset }}
+                        <v-icon dark>mdi-autorenew</v-icon> {{ text.valReset }}
                       </v-btn>
                       <v-btn
                         v-show="showFields"
@@ -270,7 +267,7 @@
                         text
                         class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
                         @click="save">
-                          <v-icon dark>mdi-content-save-edit</v-icon> {{ text.saveRec }}
+                        <v-icon dark>mdi-content-save-edit</v-icon> {{ text.saveRec }}
                       </v-btn>
                       <v-btn
                         v-show="!showFields"
@@ -278,14 +275,14 @@
                         text
                         class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
                         @click="remove">
-                          <v-icon dark>mdi-delete</v-icon> {{ text.delRec }}
+                        <v-icon dark>mdi-delete</v-icon> {{ text.delRec }}
                       </v-btn>
                       <v-btn 
                         :color="btnColor" 
                         dark text 
                         class="ma-2 mb-6 mr-2 ml-4 elevation-2" 
                         @click="close">
-                          <v-icon dark>mdi-close-circle</v-icon> {{ text.cancel }}
+                        <v-icon dark>mdi-close-circle</v-icon> {{ text.cancel }}
                       </v-btn>
                     </v-card-actions>
                   </v-form>
