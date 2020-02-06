@@ -1,0 +1,178 @@
+[
+   {
+      "firstname":"Maik",
+      "lastname":"Müller",
+      "street":"Musterstrasse 5",
+      "postcode":"28357",
+      "place":"Bremen",
+      "email":"mustermann@web.de",
+      "fon":"0421-123654",
+      "mobil":"017521-2584631",
+      "born":"1988-04-28"
+   },
+   {
+      "firstname":"Katja",
+      "lastname":"Kohl-Mirandanie",
+      "street":"Wohlder Weg 8",
+      "postcode":"28207",
+      "place":"Bremen",
+      "email":"k.kohl@t-online.de",
+      "fon":"0421-34524",
+      "mobil":"0151-1562537875",
+      "born":"1981-12-21"
+   },
+   {
+      "firstname":"Kurt Anton",
+      "lastname":"Schneider",
+      "street":"An der Weide 67",
+      "postcode":"28359",
+      "place":"Bremen",
+      "email":"schneider@kurt.com",
+      "fon":"0421-56584544",
+      "mobil":"01725-455635635",
+      "born":"1976-07-01"
+   },
+   {
+      "firstname":"Mark",
+      "lastname":"Polden-Rinder",
+      "street":"Sandweg 99",
+      "postcode":"28201",
+      "place":"Bremen",
+      "email":"muskura-lida@abrikanda.com",
+      "fon":"0421-654654",
+      "mobil":"01524-654645",
+      "born":"1969-01-18"
+   },
+   {
+      "firstname":"Susann Marie",
+      "lastname":"Mohlde",
+      "street":"Lange Str. 9",
+      "postcode":"28329",
+      "place":"Bremen",
+      "email":"m.mohlde@web.com",
+      "fon":"0421-845211",
+      "mobil":"01765-93566354",
+      "born":"1964-06-13"
+   },
+   {
+      "firstname":"Unda Lina",
+      "lastname":"Schneider",
+      "street":"Waller Weg 9",
+      "postcode":"28217",
+      "place":"Bremen",
+      "email":"unda.lina@oekoladen.com",
+      "fon":"0421-654688888",
+      "mobil":"01543-6546546",
+      "born":"1970-04-27"
+   },
+   {
+      "firstname":"Mark Jan",
+      "lastname":"Kunze",
+      "street":"Kassler Str. 12",
+      "postcode":"28832",
+      "place":"Achim",
+      "email":"m.kun@web.de",
+      "fon":"04202-876657",
+      "mobil":"0151-876222290",
+      "born":"1970-04-27"
+   },
+   {
+      "firstname":"Rika",
+      "lastname":"Schneider",
+      "street":"Kurt-Sander-Str. 34",
+      "postcode":"20357",
+      "place":"Hamburg",
+      "email":"r.Ohde@gmx.de",
+      "fon":"040-76333876",
+      "mobil":"0172-7635555909",
+      "born":"1975-10-05"
+   },
+   {
+      "firstname":"Frieda",
+      "lastname":"Müller",
+      "street":"Mausbau Weg 6",
+      "postcode":"28207",
+      "place":"Bremen",
+      "email":"l.fried@ohlde.com",
+      "fon":"0421-789098",
+      "mobil":"01445-876468809",
+      "born":"1978-08-15"
+   },
+   {
+      "firstname":"Tim",
+      "lastname":"Müller",
+      "street":"Friedrich Str. 5",
+      "postcode":"28213",
+      "place":"Bremen",
+      "email":"t.kalder@gmail.com",
+      "fon":"0421-88990077",
+      "mobil":"01754-987111234",
+      "born":"1978-08-15"
+   },
+   {
+      "firstname":"Jenni",
+      "lastname":"Müller",
+      "street":"Waldweg 4",
+      "postcode":"28832",
+      "place":"Achim",
+      "email":"jenni@gmx.net",
+      "fon":"04202",
+      "mobil":"0177-324543356",
+      "born":"1983-05-12"
+   },
+   {
+      "firstname":"Uwe",
+      "lastname":"Schmidt",
+      "street":"Hauptstr. 2",
+      "postcode":"30559",
+      "place":"Hannover",
+      "email":"schmidtchen@t-online.com",
+      "fon":"0511-4332654",
+      "mobil":"15184-87645567",
+      "born":"1958-02-07"
+   },
+   {
+      "firstname":"Michael",
+      "lastname":"Meier",
+      "street":"Dorfstr. 89",
+      "postcode":"30851",
+      "place":"Hannover",
+      "email":"m.me@yahoo.com",
+      "fon":"0511-369264863",
+      "mobil":"01543-825475978",
+      "born":"1965-10-07"
+   },
+   {
+      "firstname":"Katarina Sabine",
+      "lastname":"Kaiser-Wohlheimer",
+      "street":"Mondnachtweg 9",
+      "postcode":"28832",
+      "place":"Achim",
+      "email":"k.irmchen@web.de",
+      "fon":"04202-64387",
+      "mobil":"0151-77324536",
+      "born":"1973-07-14"
+   },
+   {
+      "firstname":"Tinka",
+      "lastname":"Bell",
+      "street":"Haus Nr. 8",
+      "postcode":"28436",
+      "place":"Bremen Stuhr",
+      "email":"tinkabel@home.de",
+      "fon":"0421-88667096",
+      "mobil":"0123-8374847003",
+      "born":"1970-02-07"
+   },
+   {
+      "firstname":"Jan Heiko",
+      "lastname":"Bürgermeister",
+      "street":"Haltestr. 9",
+      "postcode":"28436",
+      "place":"Bremen Stuhr",
+      "email":"denkste.mal@meister.com",
+      "fon":"0421-546546546",
+      "mobil":"1451-546546",
+      "born":"1970-02-07"
+   }
+]
