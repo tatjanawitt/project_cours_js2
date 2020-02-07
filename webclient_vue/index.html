@@ -187,7 +187,6 @@
                             <v-text-field
                               clearable
                               v-model="editedItem.street" 
-                              v-show="showFields"
                               :label="headers.find(i => i.value === 'street').text"
                               :maxlength="headers.find(i => i.value === 'street').max"
                               :counter="headers.find(i => i.value === 'street').max"
