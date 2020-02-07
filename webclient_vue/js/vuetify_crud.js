@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
       editedIndex: -1,
       editedItem: { ...setObj(tHead) },
       defaultItem: { ...setObj(tHead) },
-      text: { ...lableText },  //vuetify_crud_labels.js
+      text: { ...lableText },  //vuetify_crud_config.js
       valid: true, // form-rules
       nameRules: [
         v => !!v || lableText.requiredField,
@@ -174,8 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       /* ---- MODAL DIALOG FUNCTIONS --------*/
       close() {
-        this.showFields = true;
-        this.widthDialog = 800;
         this.dialog = false;
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
@@ -183,14 +181,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 300)
       },
       editItem(item) {
+        this.showFields = true;
+        this.setDialogSize(item);
+      },
+      deleteItem(item) {
+        this.showFields = false;
+        this.setDialogSize(item);
+      },
+      setDialogSize(item) {
         this.editedIndex = this.contacts.indexOf(item);
         this.editedItem = Object.assign({}, item);
         this.showFields ? this.widthDialog = modalDialogWidth : this.widthDialog = '500px';
         this.dialog = true;
-      },
-      deleteItem(item) {
-        this.showFields = false;
-        this.editItem(item);
       },
       reset() {
         this.$refs.form.reset();
