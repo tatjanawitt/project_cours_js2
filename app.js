@@ -12,8 +12,8 @@ app.use(morgan('dev', {  //control api status
     skip: (req, res) => res.statusCode < 1
 }));
 
-//app.use( express.static ('webclient_jquery' , {
-app.use(express.static('webclient_vue', {
+//app.use( express.static ('webclient_jquery' , {   // DataTable JS-Kurs 1
+app.use(express.static('webclient_vue', {           // DataTable JS-Kurs 2
     extensions: ['html', 'htm'],
 }));
 app.use(bodyParser.json());
