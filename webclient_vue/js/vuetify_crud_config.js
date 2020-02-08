@@ -5,7 +5,7 @@
  const mainColor = '#e88700'; //'#ef8f00';
  const modalDialogWidth = '800px'
  const httpHeader = { 'content-type': 'application/json' };
- const tHead = [
+ const tHead = [ // align: ' d-none' not displayed but integrate in search
    { text: '# Id', value: 'id', align: 'left' },
    { text: 'Vorname', value: 'firstname', max: '30' },
    { text: 'Nachname', value: 'lastname', max: '30' },
