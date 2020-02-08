@@ -2,7 +2,7 @@
 /**
    * Constanten for contact data table
   */
- const mainColor = '#e88700'; //'#ef8f00';
+ const mainColor = '#e88700';
  const modalDialogWidth = '800px'
  const httpHeader = { 'content-type': 'application/json' };
  const tHead = [ // align: ' d-none' not displayed but integrate in search
