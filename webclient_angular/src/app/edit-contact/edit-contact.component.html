@@ -1,0 +1,7 @@
+<h1>Kontakt bearbeiten</h1>
+<app-contact-form
+  *ngIf="contact"
+  (submitContact)="updeteContact($event)"
+  [contact]="contact"
+  [editing]="true"
+></app-contact-form>

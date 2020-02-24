@@ -1,0 +1,17 @@
+<div class="ui middle aligned selection divided list">
+  <app-contact-list-item
+    class="item"
+    *ngFor="let c of contacts"
+    [contact]="c"
+    [routerLink]="c.id"
+  ></app-contact-list-item>
+</div>
+
+<div *ngIf="!contacts" class="ui active dimmer">
+  <div class="ui large text loader">Daten werden geladen ...</div>
+</div>
+
+<p *ngIf="contacts && !contacts.length">
+  Es wurden noch keine Bücher eingetragen
+</p>
+

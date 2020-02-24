@@ -1,0 +1,44 @@
+<form class="ui form" [formGroup]="contactForm" (ngSubmit)="submitForm()">
+
+  <label>Vorname</label>
+  <input formControlName="firstname">
+
+  <label>Nachname</label>
+  <input formControlName="lastname">
+
+  <label>Email</label>
+  <input formControlName="email">
+
+  <label>Straße</label>
+  <input formControlName="street">
+
+  <div class="fields">
+    <div class="two wide field">
+      <label>PLZ</label>
+      <input formControlName="postcode">
+    </div>
+    <div class="fourteen wide field">
+      <label>Ort</label>
+      <input formControlName="place">
+    </div>
+  </div>
+
+  <label>Telefon</label>
+  <input formControlName="fon">
+
+  <label>Mobil</label>
+  <input formControlName="mobil">
+
+  <label>Geburtsdatum</label>
+  <input formControlName="born">
+
+  <label>Bild(URL)</label>
+  <input formControlName="img">
+
+  <button
+    class="ui button"
+    type="submit"
+    [disabled]="contactForm.invalid">
+    Speichern
+  </button>
+</form>

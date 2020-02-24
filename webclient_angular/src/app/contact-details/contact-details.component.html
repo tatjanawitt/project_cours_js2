@@ -1,0 +1,70 @@
+<div *ngIf="contact; else loading" class="ui link cards">
+  <div class="card">
+    <div class="image">
+      <img src="{{contact.img.includes('http') ? contact.img : '../../assets/images/'+contact.img}}">
+    </div>
+    <div class="content">
+      <div class="header">
+        <i class="address card outline icon"></i>
+        {{contact.firstname}} {{contact.lastname}}
+      </div>
+      <div class="meta">
+        <span class="right floated"><i class="phone volume icon"></i> {{contact.fon}}</span>
+        <span><i class="mobile alternate icon"></i> {{contact.mobil}}</span>
+      </div>
+      <div class="description">
+        {{ contact.street }}<br>
+        {{ contact.postcode }} {{ contact.place }}
+      </div>
+    </div>
+    <div class="extra content">
+      <span class="right floated">
+        <i class="birthday cake icon"></i> {{contact.born | date}}
+      </span>
+      <span>
+        <i class="envelope outline icon"></i>
+        {{contact.email}}
+      </span>
+    </div>
+  </div>
+  <div>
+    <button
+      class="ui tiny red labeled icon button"
+      (click)="removeContact()">
+      <i class="remove icon"></i>Kontakt löschen
+    </button>
+    <button class="ui tiny yellow labeled icon button"
+        [routerLink]="['../../contact/edit', contact.id]">
+        <i class="write icon"></i>Kontakt bearbeiten
+      </button>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="ui active centered inline loader"></div>
+</ng-template>
+
+
+<!--div *ngIf="contact" class="ui raised cards">
+  <div class="card">
+    <div class="image">
+      <img src="../../assets/images/{{contact.img || 'people.jpg'}}">
+    </div>
+    <div class="content">
+      <div class="header">{{contact.firstname}} {{contact.lastname}}</div>
+      <div class="meta">
+        <div><i class="phone volume icon"></i> {{contact.fon}}</div>
+        <div><i class="mobile alternate icon"></i> {{contact.mobil}}</div>
+      </div>
+      <div class="ui grid description" style="overflow-y:auto;white-space:nowrap;">
+        <div class="two wide column"><i class="address card outline icon"></i></div>
+        <div class="fourteen wide column">{{ contact.street }}<br>
+          {{ contact.postcode }} {{ contact.place }}</div>
+      </div>
+    </div>
+    <div class="extra content">
+      <div><i class="envelope outline icon"></i>{{contact.email}}</div>
+      <div><i class="birthday cake icon"></i> {{contact.born | date}}</div>
+    </div>
+  </div>
+</div-->
