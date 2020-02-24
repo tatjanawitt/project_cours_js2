@@ -6,5 +6,6 @@ module.exports = {
     show:   require('./show'),
     update: require('./update'),
     remove: require('./remove'),
-    import: require('./import')
+    import: require('./import'),
+    search: require('./search')
 };

@@ -12,6 +12,8 @@ const router = express.Router();
 router.get('/contacts', contactCtl.list);
 // GET /api/contacts/{id}
 router.get('/contacts/:id', contactCtl.show);
+// GET /api/contacts/search/{search}
+router.get('/contacts/search/:search', contactCtl.search);
 // POST /api/contacts
 router.post('/contacts', contactCtl.create);
 // PUT /api/contacts/{id}

@@ -12,7 +12,8 @@ class Contact {
     place = "",
     fon = "",
     mobil = "",
-    born = ""
+    born = "",
+    img = ""
   } = {}) {
       this.id = id,
       this.firstname = firstname,
@@ -23,7 +24,8 @@ class Contact {
       this.place = place,
       this.fon = fon,
       this.mobil = mobil,
-      this.born = born
+      this.born = born,
+      this.img = img
   }
 
   get dbName() {
