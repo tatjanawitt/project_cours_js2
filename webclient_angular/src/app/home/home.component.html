@@ -1,7 +1,17 @@
-<h1>Home</h1>
-<p>Das ist eine Kontaktliste!</p>
+<h1>{{'home.label' | translate }}</h1>
+<p>{{'home.tagline' | translate }}</p>
 <a routerLink="../contacts" class="ui orange button">
-  Kontakte ansehen <i class="right arrow icon"></i>
+  {{'home.btnLabel' | translate }} <i class="right arrow icon"></i>
 </a>
-<h2>Suche</h2>
+<h2></h2>
 <app-search></app-search>
+
+<select class="ui transparent selection dropdown"
+        #selectedLang
+        (change)="switchLang(selectedLang.value)">
+      <option *ngFor="let language of translate.getLangs()"
+        [value]="language"
+        [selected]="language === translate.currentLang">
+        {{ language }}
+      </option>
+    </select>

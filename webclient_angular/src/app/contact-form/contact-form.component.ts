@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input, OnChanges } from '@angular/core';
 import { Contact } from '../shared/contact';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AddressValidators } from '../shared/address-validators';
 
 @Component({
   selector: 'app-contact-form',
@@ -19,9 +20,11 @@ export class ContactFormComponent implements OnInit, OnChanges {
   submitForm() {
     const id = this.editing ? this.contact.id : -1;
     const formValue = this.contactForm.value;
+    const img = formValue.img ? formValue.img : 'people.jpg';
     const newContact: Contact = {
       id,
-      ...formValue
+      ...formValue,
+      img
     };
     this.submitContact.emit(newContact);
     this.contactForm.reset();
@@ -30,7 +33,6 @@ export class ContactFormComponent implements OnInit, OnChanges {
   ngOnChanges() {
     this.initForm();
     this.setFormValues(this.contact);
-
   }
 
   ngOnInit(): void {
@@ -42,11 +44,17 @@ export class ContactFormComponent implements OnInit, OnChanges {
 
     // id: [{value: '', disabled: this.editing}]
     this.contactForm = this.fb.group({
-      firstname: [''],
-      lastname: [''],
-      email: [''],
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
+      email: ['', [
+        Validators.required,
+        AddressValidators.emailFormat
+      ]],
       street: [''],
-      postcode: [''],
+      postcode: ['', [
+        AddressValidators.zipFormat,
+        Validators.maxLength(5)
+      ]],
       place: [''],
       fon: [''],
       mobil: [''],
@@ -55,7 +63,7 @@ export class ContactFormComponent implements OnInit, OnChanges {
     });
   }
 
-  private setFormValues(contact: Contact){
+  private setFormValues(contact: Contact) {
     this.contactForm.patchValue(contact);
   }
 }

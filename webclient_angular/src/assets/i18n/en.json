@@ -1,0 +1,43 @@
+{
+  "nav": {
+    "home": "Overview",
+    "contacts": "Contact list",
+    "new": "New contact"
+  },
+  "header":{
+    "edit": "Update this contact",
+    "add": "Create new contact"
+  },
+  "home":{
+    "label": "Little crud project",
+    "tagline": "This is a contact list!",
+    "btnLabel": "See contact list",
+    "searchLabel": "Search..."
+  },
+  "details":{
+    "delBtn": "Delete contact",
+    "editBtn": "Edit contact"
+  },
+  "form":{
+    "firstname": "Firstname",
+    "lastname": "Lastname",
+    "email": "Email",
+    "street": "Street && No.",
+    "postcode": "ZIP",
+    "place": "Place",
+    "fon": "Fon",
+    "mobil": "Mobil",
+    "born": "Birthdate",
+    "img": "Image (URL)",
+    "btnSave": "Save"
+  },
+  "bookDeleteQuestion": "Do you realy want to delete this contact?",
+  "noContact": "No contacts were found in database.",
+  "loadingData": "Loading data...",
+  "validMsg":{
+    "fname": "Firstname is required.",
+    "lname": "Lastname is required.",
+    "email": "Valid email is required.",
+    "postcode":"Zip number must have 5 digits."
+  }
+}

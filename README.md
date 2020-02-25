@@ -8,6 +8,9 @@ Projekt alfatraining JS Developer
 - Im Browser 'localhost' eingeben und 'test_data.json' importieren. (DB-Tabelle wird automatisch angelegt)
 - In 'app.js' kann zwischen Vuetify-Data-Table und JQuery-Data-Table gewechselt werden.
 
+- localhost:3000  starten mit node app.js j | v | a    j = jquery, v = vuetify, a = angular
+- angular läuft mit ng serve auf localhost:4200
+
 
 Import-Links für Vuetify Data Table Bibliotheken:
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">

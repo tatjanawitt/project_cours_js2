@@ -11,7 +11,7 @@ module.exports = (req, res) => {
     selector: {
       $or: [
         { firstname: { "$regex": '(?i)' + req.params.search } },
-        { lastname: { "$regex": '(?i)' + req.params.search } },
+        { lastname:  { "$regex": '(?i)' + req.params.search } },
         { place:     { "$regex": '(?i)' + req.params.search } },
       ]
     },

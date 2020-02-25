@@ -1,10 +1,11 @@
 <img class="ui tiny image"
-     src="{{contact.img.includes('http') ? contact.img : '../../assets/images/'+contact.img}}">
+     src="{{contact.img.includes('http') ? contact.img : '../../assets/images/'+contact.img}}"
+     appZoom>
 <div class="content">
   <div class="header">{{contact.firstname}} {{contact.lastname}}</div>
   <div class="description"><i class="envelope outline icon"></i>{{contact.email}}</div>
   <div class="meta">
-    <div><i class="phone volume icon"></i> {{contact.fon}}</div>
-    <div><i class="mobile alternate icon"></i> {{contact.mobil}}</div>
+    <div><i class="phone volume icon"></i> {{contact.fon | prefixFon}}</div>
+    <div><i class="mobile alternate icon"></i> {{contact.mobil | prefixFon}}</div>
   </div>
 </div>

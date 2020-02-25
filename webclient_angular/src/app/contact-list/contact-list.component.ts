@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Contact } from '../shared/contact';
 import { ContactStoreService } from '../shared/contact-store.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-contact-list',
@@ -8,12 +9,11 @@ import { ContactStoreService } from '../shared/contact-store.service';
   styleUrls: ['./contact-list.component.css']
 })
 export class ContactListComponent implements OnInit {
-  public contacts: Contact[];
+  contacts$: Observable<Contact[]>;
 
   constructor(private contactService: ContactStoreService) { }
 
   ngOnInit(): void {
-    this.contactService.getAll()
-    .subscribe(res => this.contacts = res);
+    this.contacts$ = this.contactService.getAll();
   }
 }

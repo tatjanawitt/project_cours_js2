@@ -1,44 +1,62 @@
-<form class="ui form" [formGroup]="contactForm" (ngSubmit)="submitForm()">
+<form class="ui form"
+  [formGroup]="contactForm"
+  (ngSubmit)="submitForm()">
 
-  <label>Vorname</label>
+  <label>{{'form.firstname' | translate }}</label>
   <input formControlName="firstname">
+  <app-form-messages
+    [control]="contactForm.get('firstname')"
+    controlName="firstname"
+  ></app-form-messages>
 
-  <label>Nachname</label>
+  <label>{{'form.lastname' | translate }}</label>
   <input formControlName="lastname">
+  <app-form-messages
+    [control]="contactForm.get('lastname')"
+    controlName="lastname"
+  ></app-form-messages>
 
-  <label>Email</label>
+  <label>{{'form.email' | translate }}</label>
   <input formControlName="email">
+  <app-form-messages
+    [control]="contactForm.get('email')"
+    controlName="email"
+  ></app-form-messages>
 
-  <label>Straße</label>
+  <label>{{'form.street' | translate }}</label>
   <input formControlName="street">
 
   <div class="fields">
     <div class="two wide field">
-      <label>PLZ</label>
+      <label>{{'form.postcode' | translate }}</label>
       <input formControlName="postcode">
     </div>
     <div class="fourteen wide field">
-      <label>Ort</label>
+      <label>{{'form.place' | translate }}</label>
       <input formControlName="place">
     </div>
   </div>
+  <app-form-messages
+    [control]="contactForm.get('postcode')"
+    controlName="postcode"
+  ></app-form-messages>
 
-  <label>Telefon</label>
+  <label>{{'form.fon' | translate }}</label>
   <input formControlName="fon">
 
-  <label>Mobil</label>
+  <label>{{'form.mobil' | translate }}</label>
   <input formControlName="mobil">
 
-  <label>Geburtsdatum</label>
-  <input formControlName="born">
+  <label>{{'form.born' | translate }}</label>
+  <input formControlName="born" type="date">
 
-  <label>Bild(URL)</label>
+  <label>{{'form.img' | translate }}</label>
   <input formControlName="img">
 
   <button
     class="ui button"
     type="submit"
     [disabled]="contactForm.invalid">
-    Speichern
+    {{'form.btnSave' | translate }}
   </button>
 </form>

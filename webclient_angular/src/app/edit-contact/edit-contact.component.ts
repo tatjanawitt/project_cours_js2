@@ -3,7 +3,6 @@ import { Contact } from '../shared/contact';
 import { ContactStoreService } from '../shared/contact-store.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap, map } from 'rxjs/operators';
-import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-edit-contact',

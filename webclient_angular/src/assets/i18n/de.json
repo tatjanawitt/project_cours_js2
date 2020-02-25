@@ -1,0 +1,43 @@
+{
+  "nav": {
+    "home": "Übersicht",
+    "contacts": "Kontaktliste",
+    "new": "Neuer Kontakt"
+  },
+  "header":{
+    "edit": "Kontakt bearbeiten",
+    "add": "Kontakt hinzufügen"
+  },
+  "home":{
+    "label": "Kleines CRUD Projekt",
+    "tagline": "Das ist eine Kontaktliste!",
+    "btnLabel": "Kontakte ansehen",
+    "searchLabel": "Suchen..."
+  },
+  "details":{
+    "delBtn": "Kontakt löschen",
+    "editBtn": "Kontakt bearbeiten"
+  },
+  "form":{
+    "firstname": "Vorname",
+    "lastname": "Nachname",
+    "email": "Email",
+    "street": "Straße && HNr.",
+    "postcode": "PLZ",
+    "place": "Ort",
+    "fon": "Telefon",
+    "mobil": "Mobil",
+    "born": "Geburtsdatum",
+    "img": "Bild (URL)",
+    "btnSave": "Speichern"
+  },
+  "bookDeleteQuestion": "Wollen Sie den Kontakt wirklich löschen?",
+  "noContact": "Es wurden noch keine Kontakte eingetragen.",
+  "loadingData": "Daten werden geladen...",
+  "validMsg":{
+    "fname": "Es muss ein Vorname angegeben werden.",
+    "lname": "Es muss ein Nachname angegeben werden.",
+    "email": "Es muss eine gültige Email angegeben werden.",
+    "postcode":"Es müssen 5 Zahlen angegeben werden."
+  }
+}
