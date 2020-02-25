@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Contact } from '../shared/contact';
 
 @Component({
@@ -6,12 +6,6 @@ import { Contact } from '../shared/contact';
   templateUrl: './contact-list-item.component.html',
   styleUrls: ['./contact-list-item.component.css']
 })
-export class ContactListItemComponent implements OnInit {
+export class ContactListItemComponent {
   @Input() contact: Contact;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }

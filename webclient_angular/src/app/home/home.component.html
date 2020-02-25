@@ -4,14 +4,18 @@
   {{'home.btnLabel' | translate }} <i class="right arrow icon"></i>
 </a>
 <h2></h2>
+<div>
+  <select 
+    class="ui transparent selection dropdown" 
+    #selectedLang 
+    (change)="switchLang(selectedLang.value)">
+    <option 
+      *ngFor="let language of translate.getLangs()" 
+      [value]="language"
+      [selected]="language === translate.currentLang">
+      {{ language }}
+    </option>
+  </select>
+</div>
+<h2></h2>
 <app-search></app-search>
-
-<select class="ui transparent selection dropdown"
-        #selectedLang
-        (change)="switchLang(selectedLang.value)">
-      <option *ngFor="let language of translate.getLangs()"
-        [value]="language"
-        [selected]="language === translate.currentLang">
-        {{ language }}
-      </option>
-    </select>

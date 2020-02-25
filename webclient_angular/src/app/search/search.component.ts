@@ -24,7 +24,6 @@ export class SearchComponent implements OnInit {
       distinctUntilChanged(),
       switchMap(searchTerm => this.contactService.getAllSearch(searchTerm)),
       tap(() => this.isLoading = false)
-    )
-      .subscribe(contacts => this.foundContacts = contacts);
+    ).subscribe(contacts => this.foundContacts = contacts);
   }
 }

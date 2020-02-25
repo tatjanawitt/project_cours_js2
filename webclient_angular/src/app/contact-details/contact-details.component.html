@@ -9,8 +9,14 @@
         {{contact.firstname}} {{contact.lastname}}
       </div>
       <div class="meta">
-        <span class="right floated"><i class="phone volume icon"></i> {{contact.fon | prefixFon}}</span>
-        <span><i class="mobile alternate icon"></i> {{contact.mobil | prefixFon}}</span>
+        <span class="right floated">
+          <i class="phone volume icon"></i> 
+          {{contact.fon | prefixFon}}
+        </span>
+        <span>
+          <i class="mobile alternate icon"></i> 
+          {{contact.mobil | prefixFon}}
+        </span>
       </div>
       <div class="description">
         {{ contact.street }}<br>
@@ -19,7 +25,8 @@
     </div>
     <div class="extra content">
       <span class="right floated">
-        <i class="birthday cake icon"></i> {{contact.born | date:'longDate'}}
+        <i class="birthday cake icon"></i> 
+        {{contact.born | date:'longDate'}}
       </span>
       <span>
         <i class="envelope outline icon"></i>
@@ -31,11 +38,13 @@
     <button
       class="ui tiny red labeled icon button"
       (click)="removeContact()">
-      <i class="remove icon"></i>{{'details.delBtn' | translate }}
+      <i class="remove icon"></i>
+      {{'details.delBtn' | translate }}
     </button>
     <button class="ui tiny yellow labeled icon button"
         [routerLink]="['../../contact/edit', contact.id]">
-        <i class="write icon"></i>{{'details.editBtn' | translate }}
+        <i class="write icon"></i>
+        {{'details.editBtn' | translate }}
       </button>
   </div>
 </div>

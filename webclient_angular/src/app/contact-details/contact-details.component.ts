@@ -18,7 +18,7 @@ export class ContactDetailsComponent implements OnInit {
     private router: Router,
     private contactService: ContactStoreService,
     public ts: TranslateService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const params = this.route.snapshot.paramMap;
@@ -29,14 +29,12 @@ export class ContactDetailsComponent implements OnInit {
   async removeContact() {
     const text = await this.ts.get('bookDeleteQuestion').toPromise();
     if (confirm(text)) {
-      this.contactService.remove(this.contact.id + '')
-        .subscribe(
-          res => this.router.navigate(['../'],
-            { relativeTo: this.route }
-          )
-        );
+      this.contactService.remove(this.contact.id + ''
+      ).subscribe(res => this.router.navigate(
+          ['../'],
+          { relativeTo: this.route }
+        )
+      );
     }
   }
-
-
 }

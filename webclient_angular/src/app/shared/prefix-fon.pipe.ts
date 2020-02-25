@@ -9,5 +9,4 @@ export class PrefixFonPipe implements PipeTransform {
     if (!value) { return null; }
     return `+49 (${value.substr(0, 1)})${value.substr(1)}`;
   }
-
 }

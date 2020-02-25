@@ -11,9 +11,7 @@ export class ContactStoreService {
   private api = 'http://localhost:3000/api';
   contacts: Contact[];
 
-  constructor(
-    private http: HttpClient
-  ) { }
+  constructor(private http: HttpClient) { }
 
   getAll(): Observable<Contact[]> {
     return this.http.get<Contact[]>(
@@ -58,7 +56,8 @@ export class ContactStoreService {
   }
 
   remove(id: string): Observable<any> {
-    return this.http.delete(`${this.api}/contacts/${id}`,
+    return this.http.delete(
+      `${this.api}/contacts/${id}`,
       { responseType: 'text' }
     ).pipe(
       catchError(this.errorHandler)
@@ -77,7 +76,7 @@ export class ContactStoreService {
     );
   }
 
-  createInstanceContact(c: any) {
+  private createInstanceContact(c: any) {
     return new Contact(
       c.id,
       c.firstname,

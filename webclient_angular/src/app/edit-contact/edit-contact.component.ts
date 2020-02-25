@@ -23,16 +23,16 @@ export class EditContactComponent implements OnInit {
     this.route.paramMap.pipe(
       map(params => params.get('id')),
       switchMap((id: string) => this.contactService.getSingle(id))
-    )
-    .subscribe(contact => this.contact = contact);
+    ).subscribe(contact => this.contact = contact);
   }
 
   updeteContact(contact: Contact) {
-    this.contactService.update(contact).subscribe(() => {
-      this.router.navigate(['../../..', 'contacts', contact.id],
-      {relativeTo: this.route }
+    this.contactService.update(contact
+    ).subscribe(() => {
+      this.router.navigate(
+        ['../../..', 'contacts', contact.id],
+        { relativeTo: this.route }
       );
     });
   }
-
 }

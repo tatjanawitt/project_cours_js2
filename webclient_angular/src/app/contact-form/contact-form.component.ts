@@ -42,7 +42,6 @@ export class ContactFormComponent implements OnInit, OnChanges {
   private initForm() {
     if (this.contactForm) { return; }
 
-    // id: [{value: '', disabled: this.editing}]
     this.contactForm = this.fb.group({
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],

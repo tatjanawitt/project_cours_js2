@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './form-messages.component.html',
   styleUrls: ['./form-messages.component.css']
 })
-export class FormMessagesComponent implements OnInit {
+export class FormMessagesComponent {
 
   @Input() control: AbstractControl;
   @Input() controlName: string;
@@ -29,9 +29,7 @@ export class FormMessagesComponent implements OnInit {
     }
   };
 
-  constructor(private ts: TranslateService) { }
-
-  ngOnInit(): void { }
+  constructor(private ts: TranslateService) {}
 
   errorsForControl(): string[] {
     const messages = this.allMessages[this.controlName];

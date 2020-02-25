@@ -8,9 +8,8 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AppComponent {
   title = 'webclient-angular';
-  constructor(
-    public translate: TranslateService
-  ) {
+  
+  constructor(public translate: TranslateService) {
     translate.addLangs(['de', 'en']);
     translate.setDefaultLang('de');
   }
