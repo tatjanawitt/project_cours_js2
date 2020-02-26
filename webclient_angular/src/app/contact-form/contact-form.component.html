@@ -82,13 +82,14 @@
     <div class=" eight wide field"></div>
     <div class="eight wide field">
       <button
-        class="ui right floated tiny labeled icon button"
+        class="ui right floated labeled icon button"        
         type="button"
         [routerLink]="['/contacts']">
         <i class="cancel icon"></i>{{'form.btnClose' | translate }}
       </button>
       <button
-        class="ui right floated tiny violet labeled icon button"
+        class="ui right floated violet labeled icon button"
+        style="margin-right: 20px;"
         type="submit"
         [disabled]="contactForm.invalid">
         <i class="save icon"></i>{{'form.btnSave' | translate }}

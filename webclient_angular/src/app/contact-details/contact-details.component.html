@@ -34,14 +34,14 @@
       </span>
     </div>
   </div>
-  <div>
-    <button
-      class="ui tiny red labeled icon button"
+  <div class="ui center aligned segment" style="width: 100%;">
+    <button style="margin-right: 20px;"
+      class="ui red labeled icon button"
       (click)="removeContact()">
-      <i class="remove icon"></i>
+      <i class="trash icon"></i>
       {{'details.delBtn' | translate }}
     </button>
-    <button class="ui tiny yellow labeled icon button"
+    <button class="ui violet labeled icon button"
         [routerLink]="['../../contact/edit', contact.id]">
         <i class="write icon"></i>
         {{'details.editBtn' | translate }}

@@ -1,8 +1,8 @@
 <h1>{{'home.label' | translate }}</h1>
 <p>{{'home.tagline' | translate }}</p>
-<div class="ui mobile reversed equal width grid">
-  <div class="column">
-    <select class="ui transparent selection dropdown"
+<div class="ui segments">
+  <div class="ui segments">
+    <select class="ui dropdown" style="margin-right: 14px;"
       #selectedLang
       (change)="switchLang(selectedLang.value)">
       <option *ngFor="let language of translate.getLangs()"
@@ -11,14 +11,12 @@
         {{ language }}
       </option>
     </select>
-  </div>
-  <div class="column">
-    <app-search></app-search>
-  </div>
-  <div class="column">
     <a routerLink="../contacts" class="ui violet right labeled icon button">
       {{'home.btnLabel' | translate }}
       <i class="right arrow icon"></i>
     </a>
+  </div>
+  <div class="ui segments">
+    <app-search></app-search>
   </div>
 </div>
