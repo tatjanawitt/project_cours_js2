@@ -22,14 +22,15 @@
     "firstname": "Firstname",
     "lastname": "Lastname",
     "email": "Email",
-    "street": "Street && No.",
+    "street": "Street & No.",
     "postcode": "ZIP",
     "place": "Place",
     "fon": "Fon",
     "mobil": "Mobil",
     "born": "Birthdate",
     "img": "Image (URL)",
-    "btnSave": "Save"
+    "btnSave": "Save",
+    "btnClose": "Cancel"
   },
   "bookDeleteQuestion": "Do you realy want to delete this contact?",
   "noContact": "No contacts were found in database.",

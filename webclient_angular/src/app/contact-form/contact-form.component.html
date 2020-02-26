@@ -1,62 +1,98 @@
-<form class="ui form"
+<form class="ui fluid form"
   [formGroup]="contactForm"
   (ngSubmit)="submitForm()">
 
-  <label>{{'form.firstname' | translate }}</label>
-  <input formControlName="firstname">
-  <app-form-messages
-    [control]="contactForm.get('firstname')"
-    controlName="firstname"
-  ></app-form-messages>
+  <div class="fields">
+    <div class="eight wide field">
+      <label>{{'form.firstname' | translate }}*</label>
+      <input formControlName="firstname">
+      <app-form-messages
+        [control]="contactForm.get('firstname')"
+        controlName="firstname"
+      ></app-form-messages>
+    </div>
+    <div class="eight wide field">
+      <label>{{'form.lastname' | translate }}*</label>
+      <input formControlName="lastname">
+      <app-form-messages
+        [control]="contactForm.get('lastname')"
+        controlName="lastname"
+      ></app-form-messages>
+    </div>
+  </div>
 
-  <label>{{'form.lastname' | translate }}</label>
-  <input formControlName="lastname">
-  <app-form-messages
-    [control]="contactForm.get('lastname')"
-    controlName="lastname"
-  ></app-form-messages>
+  <div class="field">
+    <label>{{'form.email' | translate }}*</label>
+    <input formControlName="email">
+    <app-form-messages
+      [control]="contactForm.get('email')"
+      controlName="email"
+    ></app-form-messages>
+  </div>
 
-  <label>{{'form.email' | translate }}</label>
-  <input formControlName="email">
-  <app-form-messages
-    [control]="contactForm.get('email')"
-    controlName="email"
-  ></app-form-messages>
+  <div class="ui divider"></div>
 
-  <label>{{'form.street' | translate }}</label>
-  <input formControlName="street">
+  <div class="field">
+    <label>{{'form.street' | translate }}</label>
+    <input formControlName="street">
+  </div>
 
   <div class="fields">
-    <div class="two wide field">
+    <div class="field two wide field">
       <label>{{'form.postcode' | translate }}</label>
       <input formControlName="postcode">
     </div>
-    <div class="fourteen wide field">
+    <div class="field fourteen wide field">
       <label>{{'form.place' | translate }}</label>
       <input formControlName="place">
     </div>
+    <app-form-messages
+      [control]="contactForm.get('postcode')"
+      controlName="postcode"
+    ></app-form-messages>
   </div>
-  <app-form-messages
-    [control]="contactForm.get('postcode')"
-    controlName="postcode"
-  ></app-form-messages>
 
-  <label>{{'form.fon' | translate }}</label>
-  <input formControlName="fon">
+  <div class="ui divider"></div>
 
-  <label>{{'form.mobil' | translate }}</label>
-  <input formControlName="mobil">
+  <div class="fields">
+    <div class="eight wide field">
+      <label>{{'form.fon' | translate }}</label>
+      <input formControlName="fon">
+    </div>
+    <div class="eight wide field">
+      <label>{{'form.mobil' | translate }}</label>
+      <input formControlName="mobil">
+    </div>
+  </div>
 
-  <label>{{'form.born' | translate }}</label>
-  <input formControlName="born" type="date">
+  <div class="fields">
+    <div class="eight wide field">
+      <label>{{'form.born' | translate }}</label>
+      <input formControlName="born" type="date">
+    </div>
+    <div class="eight wide field">
+      <label>{{'form.img' | translate }}</label>
+      <input formControlName="img">
+    </div>
+  </div>
 
-  <label>{{'form.img' | translate }}</label>
-  <input formControlName="img">
+  <div class="ui divider"></div>
 
-  <button
-    class="ui button"
-    type="submit"
-    [disabled]="contactForm.invalid">
-    {{'form.btnSave' | translate }}
-  </button>
+  <div class="fields">
+    <div class=" eight wide field"></div>
+    <div class="eight wide field">
+      <button
+        class="ui right floated tiny labeled icon button"
+        type="button"
+        [routerLink]="['/contacts']">
+        <i class="cancel icon"></i>{{'form.btnClose' | translate }}
+      </button>
+      <button
+        class="ui right floated tiny violet labeled icon button"
+        type="submit"
+        [disabled]="contactForm.invalid">
+        <i class="save icon"></i>{{'form.btnSave' | translate }}
+      </button>
+    </div>
+  </div>
 </form>

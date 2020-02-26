@@ -22,14 +22,15 @@
     "firstname": "Vorname",
     "lastname": "Nachname",
     "email": "Email",
-    "street": "Straße && HNr.",
+    "street": "Straße & HNr.",
     "postcode": "PLZ",
     "place": "Ort",
     "fon": "Telefon",
     "mobil": "Mobil",
     "born": "Geburtsdatum",
     "img": "Bild (URL)",
-    "btnSave": "Speichern"
+    "btnSave": "Speichern",
+    "btnClose": "Abbrechen"
   },
   "bookDeleteQuestion": "Wollen Sie den Kontakt wirklich löschen?",
   "noContact": "Es wurden noch keine Kontakte eingetragen.",

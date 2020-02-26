@@ -1,21 +1,24 @@
 <h1>{{'home.label' | translate }}</h1>
 <p>{{'home.tagline' | translate }}</p>
-<a routerLink="../contacts" class="ui orange button">
-  {{'home.btnLabel' | translate }} <i class="right arrow icon"></i>
-</a>
-<h2></h2>
-<div>
-  <select 
-    class="ui transparent selection dropdown" 
-    #selectedLang 
-    (change)="switchLang(selectedLang.value)">
-    <option 
-      *ngFor="let language of translate.getLangs()" 
-      [value]="language"
-      [selected]="language === translate.currentLang">
-      {{ language }}
-    </option>
-  </select>
+<div class="ui mobile reversed equal width grid">
+  <div class="column">
+    <select class="ui transparent selection dropdown"
+      #selectedLang
+      (change)="switchLang(selectedLang.value)">
+      <option *ngFor="let language of translate.getLangs()"
+        [value]="language"
+        [selected]="language === translate.currentLang">
+        {{ language }}
+      </option>
+    </select>
+  </div>
+  <div class="column">
+    <app-search></app-search>
+  </div>
+  <div class="column">
+    <a routerLink="../contacts" class="ui violet right labeled icon button">
+      {{'home.btnLabel' | translate }}
+      <i class="right arrow icon"></i>
+    </a>
+  </div>
 </div>
-<h2></h2>
-<app-search></app-search>
