@@ -15,10 +15,11 @@ app.use(morgan('dev', {  //control api status
     skip: (req, res) => res.statusCode < 1
 }));
 
-let client = 'angular/src'; // node app.js j | v | a
+let client = 'react/public'; // node app.js j | v | a | r
 if(process.argv[2] == 'j') client = 'jquery';       // JS Kurs 1
 if(process.argv[2] == 'v') client = 'vue';          // JS Kurs 2
 if(process.argv[2] == 'a') client = 'angular/src';  // JS Kurs 3
+if(process.argv[2] == 'r') client = 'react/public'; // JS Kurs 3
 app.use( express.static ('webclient_' + client , {
     extensions: ['html', 'htm'],
 }));
