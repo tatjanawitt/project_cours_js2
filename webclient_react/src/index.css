@@ -1,0 +1,11 @@
+@import '~semantic-ui-css/semantic.css';
+
+body {
+  margin: 10px 30px;
+  background: lavenderblush;
+}
+
+div.ui.segment {
+  background: rgb(245, 243, 243, 0.5);
+  margin-top: 50px;
+}
