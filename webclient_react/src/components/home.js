@@ -1,17 +1,23 @@
 import React from 'react';
 import Search from './shared/search';
+import { Link } from 'react-router-dom'
 
 const Home = () => {
 
   return (
     <div>
       <h1>Home</h1>
-      <p>Dies ist eine Kontaktliste</p>  
-        <a href="!#" className="ui violet right labeled icon button">
+      <p>Dies ist eine Kontaktliste</p>
+      <Link to="/contacts">
+        <button type="button" 
+          className="ui violet right labeled icon button">
           Kontaktliste
           <i className="right arrow icon"></i>
-        </a>
-        <Search />
+        </button>
+      </Link>
+
+      <div style={{ marginTop: 10 }}></div>
+      <Search />
     </div>
   )
 }
