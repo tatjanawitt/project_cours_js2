@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import ContactList from './components/ContactList';
-import LoadingSpinner from './components/shared/LoadingSpinner'
+import ContactList from './components/contacts/contact-list';
+import LoadingSpinner from './components/shared/loading-spinner'
 
-import Contact from './types/Contact';
+import Contact from './model/Contact';
 
 interface State {
   contacts: Contact[];
