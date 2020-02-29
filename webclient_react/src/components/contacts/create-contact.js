@@ -23,7 +23,7 @@ class CreateContact extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     console.log(this.props);
-    this.props.CreateContact(this.state);
+    this.props.createContact(this.state);
     this.props.history.push('/');
   }
   render() {
@@ -97,12 +97,12 @@ class CreateContact extends Component {
             <div className="eight wide field">
               <button
                 className="ui right floated labeled icon button"
-                type="button"> 
+                type="button">
                 <i className="cancel icon"></i> Abbrechen
               </button>
               <button
                 className="ui right floated violet labeled icon button"
-                style={{marginRight: 20 }}
+                style={{ marginRight: 20 }}
                 type="submit">
                 <i className="save icon"></i> Speichern
               </button>
@@ -115,7 +115,7 @@ class CreateContact extends Component {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    CreateContact: (contact) => dispatch(createContact(contact))
+    createContact: (contact) => dispatch(createContact(contact))
   }
 }
 
