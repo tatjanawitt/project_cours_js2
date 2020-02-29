@@ -9,3 +9,16 @@ div.ui.segment {
   background: rgb(245, 243, 243, 0.5);
   margin-top: 50px;
 }
+
+div.header{
+  margin: 20px 0px;
+}
+div.ui.cards > .card {
+  width: 600px;
+  margin: auto;
+}
+div.ui[class*="center aligned"].segment{
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}

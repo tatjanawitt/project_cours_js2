@@ -3,7 +3,7 @@ import React from 'react';
 const EditContact = () => {
 
   return (
-    null
+    <p>edit works</p>
   )
 }
 

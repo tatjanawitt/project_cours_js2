@@ -22,7 +22,6 @@ class CreateContact extends Component {
   }
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.props);
     this.props.createContact(this.state);
     this.props.history.push('/');
   }

@@ -4,6 +4,8 @@ import Navbar from './components/shared/navbar'
 import Home from './components/home'
 import ContactList from './components/contacts/contact-list'
 import CreateContact from './components/contacts/create-contact'
+import ContactDetails from './components/contacts/contact-details';
+import EditContact from './components/contacts/edit-contact';
 
 class App extends Component {
   render() {
@@ -13,9 +15,11 @@ class App extends Component {
           <Navbar />
           <div className="ui segment">
             <Switch>
-              <Route exact path='/' component={Home} />
-              <Route path='/contacts' component={ContactList} />
-              <Route path='/create' component={CreateContact} />
+              <Route exact path='/' component={ Home } />
+              <Route path='/list' component={ ContactList } />              
+              <Route path='/create' component={ CreateContact } />
+              <Route path='/edit/:id' component={ EditContact } />
+              <Route path='/get/:id' component={ ContactDetails } />
             </Switch>
           </div>
         </div>
