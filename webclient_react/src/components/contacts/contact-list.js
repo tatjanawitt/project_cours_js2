@@ -14,19 +14,23 @@ class ContactList extends Component {
   }
   render() {
     const { contacts } = this.state
-    const contactList = contacts.length ? (
+    let contactList = contacts.length ? (
       contacts.map(contact =>
         <ContactListItem contact={contact} key={contact.id} />
       )
-    ) : (
-        <LoadingSpinner />
-    )
+    ) : ( null )
     return (
-      <div className="project-list section">
-        <div className="ui middle aligned selection divided list">
-          { contactList }
+      (contactList) ? (
+        <div className="ui segment">
+          <div className="project-list section">
+            <div className="ui middle aligned selection divided list">
+              { contactList }
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <LoadingSpinner />
+      )
     )
   }
 }

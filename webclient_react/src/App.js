@@ -11,17 +11,15 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App">
-          <Navbar />
-          <div className="ui segment">
-            <Switch>
-              <Route exact path='/' component={ Home } />
-              <Route path='/list' component={ ContactList } />              
-              <Route path='/create' component={ UpsertContact } />
-              <Route path='/edit/:id' component={ UpsertContact } />
-              <Route path='/get/:id' component={ ContactDetails } />
-            </Switch>
-          </div>
-        </div>
+          <Navbar />          
+          <Switch>
+            <Route exact path='/' component={ Home } />
+            <Route path='/list' component={ ContactList } />              
+            <Route path='/create' component={ UpsertContact } />
+            <Route path='/edit/:id' component={ UpsertContact } />
+            <Route path='/get/:id' component={ ContactDetails } />
+          </Switch>
+        </div>        
       </BrowserRouter>
     );
   }

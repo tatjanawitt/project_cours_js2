@@ -46,7 +46,7 @@ class UpsertContact extends Component {
   render() {
     const { contact } = this.state
     return (
-      <div>
+      <div className="ui segment">
         <h1>{contact ? 'Kontakt bearbeiten:' : 'Kontakt anlegen:' } </h1>
         <form className="ui fluid form" onSubmit={this.handleSubmit}>
 
