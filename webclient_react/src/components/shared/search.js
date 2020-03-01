@@ -24,10 +24,12 @@ class Search extends Component {
   }
   render() {
     const { contacts } = this.state
-    let contactList = contacts.length ? (
-      contacts.map(contact =>
-        <SearchItem contact={contact} key={contact.id} />
-      )
+    const foundContacts = contacts.length ? (
+      <div className="results transition visible">
+        {contacts.map(contact =>
+          <SearchItem contact={contact} key={contact.id} />
+        )}
+      </div>
     ) : (null)
     return (
       <div className="ui search">
@@ -38,10 +40,8 @@ class Search extends Component {
             onChange={this.handleChange}
             value={this.state.search} />
           <i className="search icon" />
-        </div>
-        <div className="results transition visible">
-          {contactList}
-        </div>
+        </div>        
+          { foundContacts }        
       </div>
     )
   }

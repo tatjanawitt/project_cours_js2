@@ -1,7 +1,7 @@
 import axios from 'axios';
 import api from '../../components/shared/api'
 
-export const createContact = (contact) => {
+export const createContact = (contact) => {  
   return (dispatch, getState) => {
     axios({ 
       url: api.url, 

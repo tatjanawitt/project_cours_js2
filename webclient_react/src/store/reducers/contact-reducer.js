@@ -1,9 +1,7 @@
-const initState = {}
-
-const contactReducer = (state = initState, action) => {
+const contactReducer = (state = {}, action) => {
   switch (action.type) {
     case 'CREATE_CONTACT_SUCCESS':
-      console.log('create contact success');
+      console.log('create contact success', state);
       return state;
     case 'CREATE_CONTACT_ERROR':
       console.log('create contact error');
