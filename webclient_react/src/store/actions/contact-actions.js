@@ -9,6 +9,14 @@ export const createContact = (contact) => {
   }
 };
 
+export const editContact = (contact) => {
+  return (dispatch, getState) => {
+    axios({ url: `${url}/${contact.id}`, method: 'put', data: contact })
+      .then(res => dispatch({ type: 'EDIT_CONTACT_SUCCESS' }))
+      .catch(err => dispatch({ type: 'EDIT_CONTACT_ERROR' }, err))
+  }
+};
+
 export const deleteContact = (id) => {
   return (dispatch, getState) => {
     axios({ url: `${url}/${id}`, method: 'delete' })
