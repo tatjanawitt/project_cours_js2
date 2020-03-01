@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios';
 import LoadingSpinner from '../shared/loading-spinner'
 import { Link } from 'react-router-dom'
+import api from '../shared/api'
 
 class ContactDetails extends Component {
   state = {
@@ -9,7 +10,7 @@ class ContactDetails extends Component {
   }
   componentDidMount() {
     const { id } = this.props.match.params
-    axios.get(`http://localhost:3000/api/contacts/${id}`)
+    axios.get(`${api.url}/${id}`)
       .then(res => this.setState({ contact: res.data }))
       .catch(err => console.log(err))
   }

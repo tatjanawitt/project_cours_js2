@@ -1,9 +1,9 @@
 import axios from 'axios';
-const url = 'http://localhost:3000/api/contacts';
+import api from '../../components/shared/api'
 
 export const createContact = (contact) => {
   return (dispatch, getState) => {
-    axios({ url: url, method: 'post', data: contact })
+    axios({ url: api.url, method: 'post', data: contact })
       .then(res => dispatch({ type: 'CREATE_CONTACT_SUCCESS' }))
       .catch(err => dispatch({ type: 'CREATE_CONTACT_ERROR' }, err))
   }
@@ -11,7 +11,7 @@ export const createContact = (contact) => {
 
 export const editContact = (contact) => {
   return (dispatch, getState) => {
-    axios({ url: `${url}/${contact.id}`, method: 'put', data: contact })
+    axios({ url: `${api.url}/${contact.id}`, method: 'put', data: contact })
       .then(res => dispatch({ type: 'EDIT_CONTACT_SUCCESS' }))
       .catch(err => dispatch({ type: 'EDIT_CONTACT_ERROR' }, err))
   }
@@ -19,7 +19,7 @@ export const editContact = (contact) => {
 
 export const deleteContact = (id) => {
   return (dispatch, getState) => {
-    axios({ url: `${url}/${id}`, method: 'delete' })
+    axios({ url: `${api.url}/${id}`, method: 'delete' })
       .then(res => dispatch({ type: 'DELETE_CONTACT_SUCCESS' }))
       .catch(err => dispatch({ type: 'DELETE_CONTACT_ERROR' }, err))
 

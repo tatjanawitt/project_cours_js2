@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import ContactListItem from './contact-list-item';
+import React, { Component } from 'react'
+import axios from 'axios'
+import api from '../shared/api'
+import ContactListItem from './contact-list-item'
 import LoadingSpinner from '../shared/loading-spinner'
 
 class ContactList extends Component {
@@ -8,7 +9,7 @@ class ContactList extends Component {
     contacts: []
   }
   componentDidMount() {
-    axios.get('http://localhost:3000/api/contacts')
+    axios.get(api.url)
       .then(res => this.setState({ contacts: res.data }))
       .catch(err => console.log(err))
   }

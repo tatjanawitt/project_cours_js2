@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios';
+import api from '../shared/api'
 import { connect } from 'react-redux'
 import { createContact, editContact } from '../../store/actions/contact-actions'
 
@@ -21,7 +22,7 @@ class UpsertContact extends Component {
   componentDidMount() {
     const { id } = this.props.match.params
     if (!id) return
-    axios.get(`http://localhost:3000/api/contacts/${id}`)
+    axios.get(`${api.url}/${id}`)
       .then(res => this.setState({ ...res.data, contact: res.data }))
       .catch(err => console.log(err))
   }

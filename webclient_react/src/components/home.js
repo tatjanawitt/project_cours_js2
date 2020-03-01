@@ -1,5 +1,5 @@
-import React from 'react';
-import Search from './shared/search';
+import React from 'react'
+import Search from './shared/search'
 import { Link } from 'react-router-dom'
 
 const Home = () => {
