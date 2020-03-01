@@ -16,7 +16,7 @@ class UpsertContact extends Component {
     fon: '',
     mobil: '',
     born: '',
-    img: ''
+    img: 'people.jpg'
   }
 
   componentDidMount() {

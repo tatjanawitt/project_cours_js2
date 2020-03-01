@@ -14,7 +14,8 @@ const Home = () => {
           <i className="right arrow icon"></i>
         </button>
       </Link>
-      <div style={{ marginTop: 10 }}></div>
+      <div style={{ marginTop: 20 }}></div>
+      <h1>Suche</h1>
       <Search />
     </div>
   )

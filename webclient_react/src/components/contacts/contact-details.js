@@ -1,18 +1,31 @@
 import React, { Component } from 'react'
-import axios from 'axios';
-import LoadingSpinner from '../shared/loading-spinner'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { deleteContact } from '../../store/actions/contact-actions'
+import axios from 'axios'
 import api from '../shared/api'
+import LoadingSpinner from '../shared/loading-spinner'
+
 
 class ContactDetails extends Component {
   state = {
     id: null
   }
+
   componentDidMount() {
     const { id } = this.props.match.params
     axios.get(`${api.url}/${id}`)
-      .then(res => this.setState({ contact: res.data }))
+      .then(res => this.setState({ id, contact: res.data }))
       .catch(err => console.log(err))
+  }
+
+  deleteContact(){
+    if (window.confirm(
+      'Soll der Kontakt wirklich gelöscht werden?'
+    )) {
+      this.props.deleteContact(this.state.id)
+      this.props.history.push('/')
+    }    
   }
 
   render() {
@@ -21,7 +34,7 @@ class ContactDetails extends Component {
       <LoadingSpinner />
     ) : (
       <div className="ui segment">
-        <div className="ui link cards">
+        <div className="ui link cards" style={{ marginTop: 10 }}>
           <div className="card">
             <div className="image">
               <img src={'http://localhost:3001/img/' + contact.img} alt="Person" />
@@ -57,9 +70,10 @@ class ContactDetails extends Component {
               </span>
             </div>
           </div>
-          <div className="ui center aligned segment" style={{ width: '100%' }}>
+          <div className="ui center aligned segment">
             <button style={{ marginRight: 20 }}
-              className="ui red labeled icon button">
+              className="ui red labeled icon button"
+              onClick={ () => this.deleteContact() }>
               <i className="trash icon" /> Kontakt löschen
           </button>
             <Link to={
@@ -70,7 +84,7 @@ class ContactDetails extends Component {
             }>
               <button className="ui violet labeled icon button">
                 <i className="write icon" /> Kontakt bearbeiten
-            </button>
+              </button>
             </Link>
           </div>
         </div>
@@ -78,4 +92,9 @@ class ContactDetails extends Component {
     )
   )}
 }
-export default ContactDetails;
+const mapDispatchToProps = dispatch => {
+  return {
+    deleteContact: (id) => dispatch(deleteContact(id))
+  }
+}
+export default connect(null, mapDispatchToProps)(ContactDetails);
