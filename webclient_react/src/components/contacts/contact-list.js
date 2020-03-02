@@ -7,19 +7,21 @@ import { connect } from 'react-redux';
 import { getContactList } from '../../store/actions/contact-actions'
 
 class ContactList extends Component {
-  state = {
+  initState = {
     contacts: []
   }
+  state = this.initState
+
   componentDidMount() {
-    this.props.getContactList()
+    // this.props.getContactList()
     axios.get(api.url)
       .then(res => this.setState({ contacts: res.data }))
       .catch(err => console.log(err))
   }
   render() {
-    console.log('thisPropsContacts', this.props)
+    //console.log('props', this.props)
     const { contacts } = this.state
-    let contactList = contacts.length ? (
+    let contactList = contacts && contacts.length ? (
       contacts.map(contact =>
         <ContactListItem contact={contact} key={contact.id} />
       )
@@ -39,8 +41,8 @@ class ContactList extends Component {
     )
   }
 }
-const mapStateToProps = (state) => {
-  return{
+const mapStateToProps = state => {
+  return {
     contacts: state.contacts
   }
 }

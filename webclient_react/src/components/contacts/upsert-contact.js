@@ -46,7 +46,7 @@ class UpsertContact extends Component {
     e.preventDefault();
     if (!this.state.id) delete this.state['id']
     this.props.upsertContact(this.state)
-    this.props.history.push('/list')
+    this.props.history.push('/')
   }
 
   handleClose = () => {
