@@ -29,24 +29,9 @@ export const deleteContact = (id) => {
   return (dispatch, getState) => {
     axios({
       url: `${api.url}/${id}`,
-      method: 'delete',
-      data: null
+      method: 'delete'
     })
       .then(res => dispatch({ type: 'DELETE_CONTACT_SUCCESS' }))
       .catch(err => dispatch({ type: 'DELETE_CONTACT_ERROR' }, err))
-  }
-}
-
-export const getContactList = () => {
-  const req = axios.get(api.url)
-  return dispatch => {
-    req.then(res => dispatch({
-      type: 'GET_CONTACTS_SUCCESS',
-      payload: res.data
-    })
-    ).catch(err => dispatch({ 
-      type: 'GET_CONTACTS_ERROR', 
-      payload: err
-    }))
   }
 }

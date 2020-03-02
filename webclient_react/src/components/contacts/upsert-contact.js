@@ -16,7 +16,7 @@ class UpsertContact extends Component {
     fon: '',
     mobil: '',
     born: '',
-    img: 'people.jpg'
+    img: ''
   }
   state = this.initState
 
@@ -45,6 +45,8 @@ class UpsertContact extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     if (!this.state.id) delete this.state['id']
+    // eslint-disable-next-line
+    if (!this.state.img) this.state.img = 'people.jpg' 
     this.props.upsertContact(this.state)
     this.props.history.push('/')
   }

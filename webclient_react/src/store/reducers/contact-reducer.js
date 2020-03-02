@@ -3,15 +3,6 @@ const initState = {}
 
 const contactReducer = (state = initState, action) => {
   switch (action.type) {
-    case 'GET_CONTACTS_SUCCESS':
-      console.log('get contacts success');
-      return {
-        ...state, 
-        contacts: action.payload
-      };
-    case 'GET_CONTACTS_ERROR':
-      console.log('get contacts error');
-      return {...state, err: action.payload };
     case 'CREATE_CONTACT_SUCCESS':
       console.log('create contact success');
       return state;
