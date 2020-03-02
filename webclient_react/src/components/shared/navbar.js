@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 
 const Navbar = () => {
   return (
-    <div className="ui pointing menu fixed">
+    <div className="ui top fixed menu">
       <NavLink  className="item" exact to="/">Home</NavLink>
       <NavLink className="item" to='/list'>Kontaktliste</NavLink>
       <NavLink className="item" to='/create'>Neuer Kontakt</NavLink>

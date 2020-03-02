@@ -3,17 +3,21 @@ import axios from 'axios'
 import api from '../shared/api'
 import ContactListItem from './contact-list-item'
 import LoadingSpinner from '../shared/loading-spinner'
+import { connect } from 'react-redux';
+import { getContactList } from '../../store/actions/contact-actions'
 
 class ContactList extends Component {
   state = {
     contacts: []
   }
   componentDidMount() {
+    this.props.getContactList()
     axios.get(api.url)
       .then(res => this.setState({ contacts: res.data }))
       .catch(err => console.log(err))
   }
   render() {
+    console.log('thisPropsContacts', this.props)
     const { contacts } = this.state
     let contactList = contacts.length ? (
       contacts.map(contact =>
@@ -35,4 +39,15 @@ class ContactList extends Component {
     )
   }
 }
-export default ContactList;
+const mapStateToProps = (state) => {
+  return{
+    contacts: state.contacts
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getContactList: () => dispatch(getContactList())
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ContactList);

@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { createContact, editContact } from '../../store/actions/contact-actions'
 
 class UpsertContact extends Component {
-  state = {
+  initState = {
     id: null,
     firstname: '',
     lastname: '',
@@ -18,6 +18,7 @@ class UpsertContact extends Component {
     born: '',
     img: 'people.jpg'
   }
+  state = this.initState
 
   componentDidMount() {
     const { id } = this.props.match.params
@@ -25,6 +26,14 @@ class UpsertContact extends Component {
     axios.get(`${api.url}/${id}`)
       .then(res => this.setState({ ...res.data, contact: res.data }))
       .catch(err => console.log(err))
+  }
+
+  componentDidUpdate(prevProbs, prevState) {
+    if (this.props && prevProbs && this.props.match && prevProbs.match) {      
+      if (this.props.match.path && prevProbs.match.path !== this.props.match.path) {
+        this.setState(this.initState)
+      }
+    }
   }
 
   handleChange = (e) => {
@@ -37,7 +46,7 @@ class UpsertContact extends Component {
     e.preventDefault();
     if (!this.state.id) delete this.state['id']
     this.props.upsertContact(this.state)
-    this.props.history.push('/')
+    this.props.history.push('/list')
   }
 
   handleClose = () => {
@@ -48,31 +57,31 @@ class UpsertContact extends Component {
     const { contact } = this.state
     return (
       <div className="ui segment">
-        <h1>{contact ? 'Kontakt bearbeiten:' : 'Kontakt anlegen:' } </h1>
+        <h1>{contact ? 'Kontakt bearbeiten:' : 'Kontakt anlegen:'} </h1>
         <form className="ui fluid form" onSubmit={this.handleSubmit}>
 
           <div className="fields">
             <div className="eight wide field">
               <label>Vorname</label>
-              <input type="text" 
-                id='firstname' 
-                defaultValue={contact ? contact.firstname : ''} 
+              <input type="text"
+                id='firstname'
+                value={this.state.firstname}
                 onChange={this.handleChange} />
             </div>
             <div className="eight wide field">
               <label>Nachname</label>
-              <input type="text" 
-                id="lastname" 
-                defaultValue={contact ? contact.lastname : ''} 
+              <input type="text"
+                id="lastname"
+                value={this.state.lastname}
                 onChange={this.handleChange} />
             </div>
           </div>
 
           <div className="field">
             <label>Email</label>
-            <input type="email" 
-              id="email" 
-              defaultValue={contact ? contact.email : ''} 
+            <input type="email"
+              id="email"
+              value={this.state.email}
               onChange={this.handleChange} />
           </div>
 
@@ -80,25 +89,25 @@ class UpsertContact extends Component {
 
           <div className="field">
             <label>Straße & H-Nr.</label>
-            <input type="text" 
-              id="street" 
-              defaultValue={contact ? contact.street : ''} 
+            <input type="text"
+              id="street"
+              value={this.state.street}
               onChange={this.handleChange} />
           </div>
 
           <div className="fields">
             <div className="field two wide field">
               <label>PLZ</label>
-              <input type="text" 
-                id="postcode" 
-                defaultValue={contact ? contact.postcode : ''} 
+              <input type="text"
+                id="postcode"
+                value={this.state.postcode}
                 onChange={this.handleChange} />
             </div>
             <div className="field fourteen wide field">
               <label>Ort</label>
-              <input type="text" 
-                id="place" 
-                defaultValue={contact ? contact.place : ''} 
+              <input type="text"
+                id="place"
+                value={this.state.place}
                 onChange={this.handleChange} />
             </div>
           </div>
@@ -108,16 +117,16 @@ class UpsertContact extends Component {
           <div className="fields">
             <div className="eight wide field">
               <label>Telefon</label>
-              <input type="text" 
-                id="fon" 
-                defaultValue={contact ? contact.fon : ''} 
+              <input type="text"
+                id="fon"
+                value={this.state.fon}
                 onChange={this.handleChange} />
             </div>
             <div className="eight wide field">
               <label>Mobil</label>
-              <input type="text" 
-                id="mobil" 
-                defaultValue={contact ? contact.mobil : ''} 
+              <input type="text"
+                id="mobil"
+                value={this.state.mobil}
                 onChange={this.handleChange} />
             </div>
           </div>
@@ -125,16 +134,16 @@ class UpsertContact extends Component {
           <div className="fields">
             <div className="eight wide field">
               <label>Geburtsdatum</label>
-              <input type="date" 
-                id="born" 
-                defaultValue={contact ? contact.born : ''} 
+              <input type="date"
+                id="born"
+                value={this.state.born}
                 onChange={this.handleChange} />
             </div>
             <div className="eight wide field">
               <label>Bild (URL)</label>
-              <input type="text" 
-                id="img" 
-                defaultValue={contact ? contact.img : ''} 
+              <input type="text"
+                id="img"
+                value={this.state.img}
                 onChange={this.handleChange} />
             </div>
           </div>
@@ -146,7 +155,7 @@ class UpsertContact extends Component {
             <div className="eight wide field">
               <button type="button"
                 className="ui right floated labeled icon button"
-                onClick={ this.handleClose }>
+                onClick={this.handleClose}>
                 <i className="cancel icon" /> Abbrechen
               </button>
               <button type="submit"

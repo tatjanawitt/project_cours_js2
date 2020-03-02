@@ -32,7 +32,7 @@ class Search extends Component {
       </div>
     ) : (null)
     return (
-      <div className="ui search">
+      <div className={`ui search ${(this.state.search.length > 0 &&  this.state.search.length < 4) && 'loading'}`}>
         <div className="ui icon input">
           <input type="text"
             placeholder="Search"

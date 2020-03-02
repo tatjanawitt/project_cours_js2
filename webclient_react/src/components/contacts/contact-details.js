@@ -37,7 +37,7 @@ class ContactDetails extends Component {
         <div className="ui link cards" style={{ marginTop: 10 }}>
           <div className="card">
             <div className="image">
-              <img src={'http://localhost:3001/img/' + contact.img} alt="Person" />
+              <img src={'http://localhost:3001/img/' + contact.img } alt="Person" />
             </div>
             <div className="content">
               <div className="header">
