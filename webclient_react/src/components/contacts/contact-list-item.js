@@ -10,7 +10,9 @@ const ContactListItem = ({ contact }) => {
       }
     } className="item">
       <img className="ui tiny image"
-        src={ 'http://localhost:3001/img/' + contact.img } 
+        src={ contact.img.includes('http') 
+          ? contact.img 
+          : 'http://localhost:3001/img/' + contact.img } 
         alt="Person" />
       <div className="content">
         <div className="header">

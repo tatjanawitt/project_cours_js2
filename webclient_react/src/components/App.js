@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import Navbar from './components/shared/navbar'
-import Home from './components/home'
-import ContactList from './components/contacts/contact-list'
-import ContactDetails from './components/contacts/contact-details'
-import UpsertContact from './components/contacts/upsert-contact'
+import Navbar from './shared/navbar'
+import Home from './dashbord/home'
+import ContactList from './contacts/contact-list'
+import ContactDetails from './contacts/contact-details'
+import UpsertContact from './contacts/upsert-contact'
 
 class App extends Component {
   render() {

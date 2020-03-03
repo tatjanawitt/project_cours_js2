@@ -34,10 +34,13 @@ class ContactDetails extends Component {
       <LoadingSpinner />
     ) : (
       <div className="ui segment">
-        <div className="ui link cards" style={{ marginTop: 10 }}>
+        <div className="ui cards" style={{ marginTop: 10 }}>
           <div className="card">
             <div className="image">
-              <img src={'http://localhost:3001/img/' + contact.img } alt="Person" />
+              <img src={ contact.img.includes('http') 
+                ? contact.img 
+                : 'http://localhost:3001/img/' + contact.img } 
+                alt="Person" />
             </div>
             <div className="content">
               <div className="header">
