@@ -15,7 +15,7 @@ app.use(morgan('dev', {  //control api status
     skip: (req, res) => res.statusCode < 1
 }));
 
-let client = 'react/public'; // node app.js j | v | a | r
+let client = 'react_ts/public'; // node app.js j | v | a | r
 if(process.argv[2] == 'j') client = 'jquery';       // JS Kurs 1
 if(process.argv[2] == 'v') client = 'vue';          // JS Kurs 2
 if(process.argv[2] == 'a') client = 'angular/src';  // JS Kurs 3
