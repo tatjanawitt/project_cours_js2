@@ -67,7 +67,11 @@ export default class ContactDetails extends Component<Props, State> {
             <div className="extra content">
               <span className="right floated">
                 <i className="birthday cake icon" />
-                {contact.born}
+                {(
+                  new Date(contact.born).toLocaleDateString(
+                    'de-DE', 
+                    { year: 'numeric', month: 'short', day: 'numeric' })
+                )}
               </span>
               <span>
                 <i className="envelope outline icon" />
