@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
-const Navbar = () => {
+export default function Navbar() {
   return (
     <div className="ui top fixed menu">
       <NavLink  className="item" exact to="/">Home</NavLink>
@@ -10,4 +10,3 @@ const Navbar = () => {
     </div>
   )
 }
-export default Navbar

@@ -1,43 +1,37 @@
 import React, { Component } from 'react'
 import { RouteComponentProps } from 'react-router'
-import axios from 'axios'
-import api from '../shared/api'
+import { getContact, deleteContact } from '../shared/request-to-api'
 import { Link } from 'react-router-dom'
 import LoadingSpinner from '../shared/loading-spinner'
-
 import Contact from '../../types/Contact'
 
 interface Props extends RouteComponentProps<{id: string}> {}
-interface State {
-  contact: Contact,
-  id: string
-}
+interface State extends Contact { }
 
 export default class ContactDetails extends Component<Props, State> {
  
-  public componentDidMount() { 
+  public async componentDidMount(): Promise<void> {
     const { id } = this.props.match.params
-    axios.get(`${api.url}/${id}`).then(
-      res => this.setState({ id, contact: res.data })
-    ).catch(err => console.log(err))
+    try {
+      const res = await getContact(parseInt(id));
+      if (res && res.data) this.setState({ id, ...res.data })
+      else throw Error('Keine Daten von Api');
+    } catch (err) { console.log(`😱 Api Request Fehler: ${err}`) }
   }
 
-  public deleteContact() {
-    if (window.confirm(
-      'Soll der Kontakt wirklich gelöscht werden?'
-    )) {
-      console.log(this.state.id)
-      axios({
-        url: `${api.url}/${this.state.id}`,
-        method: 'delete'
-      }).then(
-        res => this.props.history.push('/list')
-      ).catch(err => console.log(err))
+  private async deleteContact(): Promise<void> {
+    const { id } = this.state
+    if (window.confirm('Soll der Kontakt gelöscht werden?')) {
+      try {
+        const res = await deleteContact(id);
+        if (res) this.props.history.push('/list')
+        else throw Error('Etwas ging schief!');
+      } catch (err) { console.log(`😱 Api Request Fehler: ${err}`) }
     }    
   }
 
   public render() {
-    const contact: Contact  = this.state && this.state.contact
+    const contact: Contact  = this.state
     return ((!contact) ? (
       <LoadingSpinner />
     ) : (
