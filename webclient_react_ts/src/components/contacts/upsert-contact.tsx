@@ -75,8 +75,10 @@ export default class UpsertContact extends Component<Props, State> {
 
           <div className="fields">
             <div className="eight wide field">
-              <label>Vorname</label>
+              <label htmlFor="firstname">Vorname</label>
               <input type="text"
+                placeholder="Pflichtfeld"
+                required
                 id='firstname'
                 value={this.state.firstname}
                 onChange={this.handleChange} />
@@ -84,6 +86,8 @@ export default class UpsertContact extends Component<Props, State> {
             <div className="eight wide field">
               <label>Nachname</label>
               <input type="text"
+                placeholder="Pflichtfeld"
+                required
                 id="lastname"
                 value={this.state.lastname}
                 onChange={this.handleChange} />
@@ -93,6 +97,8 @@ export default class UpsertContact extends Component<Props, State> {
           <div className="field">
             <label>Email</label>
             <input type="email"
+              placeholder="Pflichtfeld"
+              required
               id="email"
               value={this.state.email}
               onChange={this.handleChange} />
@@ -113,6 +119,10 @@ export default class UpsertContact extends Component<Props, State> {
               <label>PLZ</label>
               <input type="text"
                 id="postcode"
+                placeholder="PLZ (5 Zahlen)"
+                pattern="^-?[0-9]\d*\.?\d*$"
+                maxLength={5}
+                minLength={0 || 5}
                 value={this.state.postcode}
                 onChange={this.handleChange} />
             </div>

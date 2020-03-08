@@ -64,7 +64,10 @@ export default class ContactDetails extends Component<Props, State> {
                 {contact.postcode} {contact.place}
               </div>
             </div>
+            
             <div className="extra content">
+            {
+              (contact.born ?
               <span className="right floated">
                 <i className="birthday cake icon" />
                 {(
@@ -73,6 +76,8 @@ export default class ContactDetails extends Component<Props, State> {
                     { year: 'numeric', month: 'short', day: 'numeric' })
                 )}
               </span>
+              : null)
+            }
               <span>
                 <i className="envelope outline icon" />
                 {contact.email}
